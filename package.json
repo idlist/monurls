@@ -1,0 +1,19 @@
+{
+  "name": "monurls",
+  "version": "0.0.1",
+  "description": "My own Node.js URL shortener.",
+  "author": "i'DLisT",
+  "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idlist/monurls.git"
+  },
+  "bugs": {
+    "url": "https://github.com/idlist/monurls/issues"
+  },
+  "homepage": "https://github.com/idlist/monurls#readme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
