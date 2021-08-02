@@ -11,9 +11,15 @@ interface ServerConfig {
     user: string
     password: string
   }
-  key: number
+  key: string[]
 }
 
 const config = yaml.load(readFileSync('./config.yaml', 'utf-8')) as ServerConfig
 
+interface ServerState {
+  code: number
+  message?: string
+}
+
 export default config
+export type { ServerState }

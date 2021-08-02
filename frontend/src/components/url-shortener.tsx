@@ -1,27 +1,40 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 
 import './url-shortener.sass'
 
 const UrlShortener = () => {
-  const [longUrl, setLongUrl] = useState('')
+  const [fullUrl, setFullUrl] = useState('')
   const [destUrl, setDestUrl] = useState('')
   const [result, setResult] = useState('')
 
-  const getShortenedURL = () => {
-    setResult('https://s.idl.ist')
+  const getShortenedURL = async () => {
+    const res = await axios.get(`http://localhost:17777/api/shorten`, {
+      params: {
+        full: fullUrl,
+        dest: destUrl,
+        key: localStorage.getItem('key')
+      }
+    })
+
+    if ('shortened' in res.data) {
+      setResult(window.location.href + res.data.shortened)
+    } else {
+      console.log(res.data)
+    }
   }
 
   return (
     <div className='url-shortener'>
       <input
-        type='url' value={ longUrl }
-        onChange={ (e) => { setLongUrl(e.target.value) } }
-        placeholder='URL to be shorten' />
+        type='url' value={ fullUrl }
+        placeholder='URL to be shorten'
+        onChange={ (e) => { setFullUrl(e.target.value) } } />
       <div className='url-shortener__row'>
         <input
           type='text' value={ destUrl }
-          onChange={ (e) => { setDestUrl(e.target.value) } }
-          placeholder='(Optional) destination URL' />
+          placeholder='(Optional) destination URL'
+          onChange={ (e) => { setDestUrl(e.target.value) } } />
         <button onClick={ () => { getShortenedURL() } }>
           Shorten
         </button>

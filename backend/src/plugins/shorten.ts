@@ -3,7 +3,7 @@ import { randomInt } from 'crypto'
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 
-import config from '../config'
+import config, { ServerState } from '../config'
 import pool from '../database'
 
 const dict = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -22,38 +22,40 @@ const checkDuplicate = async (shortened: string): Promise<boolean> => {
 }
 
 interface APIQuery {
-  key: number
+  key: string
   full: string
   dest: string
 }
 
+interface APIReply extends ServerState {
+  shortened?: string
+}
+
 const api: FastifyPluginAsync = async (server) => {
-  server.get<{ Querystring: APIQuery }>('/api/shorten', async (request, reply) => {
+  server.get<{ Querystring: APIQuery }>('/api/shorten', async (request): Promise<APIReply> => {
     const { query } = request
 
-    if (!('key' in query) || query.key != config.key) {
-      reply.code(403)
+    if (!('key' in query) || !config.key.includes(query.key)) {
       return {
-        errCode: 0,
-        error: 'Not authorized.'
+        code: 100,
+        message: 'Not authorized.'
       }
     }
 
     if (!('full' in query)) {
-      reply.code(400)
       return {
-        errCode: 1,
-        error: 'No data sent.'
+        code: 101,
+        message: 'No data sent.'
       }
     }
 
     let shortened = ''
-    if ('dest' in query) {
+    if ('dest' in query && query.dest) {
       const existed = await checkDuplicate(query.dest)
       if (existed) {
         return {
-          errCode: 2,
-          error: 'The destination URL is duplicated.'
+          code: 102,
+          message: 'The destination URL is duplicated.'
         }
       }
       shortened = query.dest
@@ -65,6 +67,7 @@ const api: FastifyPluginAsync = async (server) => {
 
     await pool.query(`INSERT INTO urls (full, shortened) VALUES ('${query.full}', '${shortened}')`)
     return {
+      code: 0,
       shortened: shortened
     }
   })

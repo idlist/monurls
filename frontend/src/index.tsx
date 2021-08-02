@@ -6,7 +6,7 @@ import './index.sass'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Layout />
+    <Layout/>
   </React.StrictMode>,
   document.getElementById('root')
 )

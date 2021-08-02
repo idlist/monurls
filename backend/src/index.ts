@@ -1,15 +1,23 @@
 import fastify from 'fastify'
+import fastifyCors from 'fastify-cors'
 
 import config from './config'
 import './database'
 import mainPage from './plugins/main-page'
-import api from './plugins/api'
+import auth from './plugins/auth'
+import shorten from './plugins/shorten'
 import jump from './plugins/jump'
 
 const server = fastify()
 
+server.register(fastifyCors, {
+  origin: 'http://localhost:16666',
+  methods: 'GET'
+})
+
 server.register(mainPage)
-server.register(api)
+server.register(auth)
+server.register(shorten)
 server.register(jump)
 
 const main = async () => {

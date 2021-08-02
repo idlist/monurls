@@ -3,16 +3,40 @@ $l-screen: 768px
 
 $font-stack: 'Open Sans', 'Segoe UI', sans-serif
 
-%absolute
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
-  position: absolute
+%simple-input
+  display: flex
 
-%fullscreen
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
-  position: fixed
+  width: auto
+  height: 2rem
+  padding: 0rem 0.5rem
+
+  border: 1px solid #aaa
+  border-radius: 0
+
+  &:focus
+    border-color: #333
+
+%simple-button
+  height: 2rem
+
+  border: none
+  border-radius: 0
+  background-color: #333
+  color: #fff
+
+  cursor: pointer
+
+  -webkit-user-select: none
+
+  &:hover
+    background-color: #666
+
+    @media (max-width: $s-screen)
+      background-color: #333
+
+    &:active
+      background-color: #999
+
+    @media (max-width: $s-screen)
+      width: 50%
+      margin: 0 auto

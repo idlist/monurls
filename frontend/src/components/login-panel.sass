@@ -1,0 +1,16 @@
+@import ../../constants
+
+.login-panel
+  display: grid
+  grid-template-columns: 3fr 1fr
+  column-gap: 1rem
+  align-items: center
+
+  width: auto
+  padding: 1rem
+
+  input
+    @extend %simple-input
+
+  button
+    @extend %simple-button
