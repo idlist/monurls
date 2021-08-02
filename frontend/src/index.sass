@@ -1,8 +1,12 @@
 @import ../../node_modules/normalize.css/normalize
+@import ../constants
 @import ../fonts/open-sans
 
 body
-  font-family: 'Open Sans', 'Segoe UI', sans-serif
+  font-family: $font-stack
 
-input:focus-visible
-  outline: none
+input
+  -webkit-appearance: none
+
+  &:focus-visible
+    outline: none

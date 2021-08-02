@@ -1,6 +1,7 @@
 import React from 'react'
 
 import UrlShortener from './components/url-shortener'
+import ManageLinks from './components/manage-links'
 import './layout.sass'
 
 const Header = () => {
@@ -13,7 +14,10 @@ const Header = () => {
 
 const App = () => {
   return (
-    <UrlShortener />
+    <div className='app'>
+      <UrlShortener />
+      <ManageLinks />
+    </div>
   )
 }
 

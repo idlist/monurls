@@ -8,7 +8,7 @@ const UrlShortener = () => {
   const [result, setResult] = useState('')
 
   const getShortenedURL = () => {
-    setResult('https://idl.ist')
+    setResult('https://s.idl.ist')
   }
 
   return (
