@@ -1,7 +1,7 @@
 import React from 'react'
 
 import UrlShortener from './components/url-shortener'
-import 'layout.sass'
+import './layout.sass'
 
 const Header = () => {
   return (
