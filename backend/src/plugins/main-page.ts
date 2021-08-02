@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 
 import { FastifyPluginAsync } from 'fastify'
-import fastifyPlugin from 'fastify-plugin'
+import fp from 'fastify-plugin'
 import fastifyStatic from 'fastify-static'
 
 const mainPage: FastifyPluginAsync = async (server) => {
@@ -14,4 +14,4 @@ const mainPage: FastifyPluginAsync = async (server) => {
   })
 }
 
-export default fastifyPlugin(mainPage)
+export default fp(mainPage)

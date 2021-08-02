@@ -1,22 +1,20 @@
-import { readFile } from 'fs/promises'
-
 import fastify from 'fastify'
-import yaml from 'js-yaml'
 
+import config from './config'
+import './database'
 import mainPage from './plugins/main-page'
+import api from './plugins/api'
+import jump from './plugins/jump'
 
 const server = fastify()
 
 server.register(mainPage)
-
-interface ServerConfig {
-  port: number
-}
+server.register(api)
+server.register(jump)
 
 const main = async () => {
   try {
-    const secrets = yaml.load(await readFile('./secrets.yaml', 'utf-8')) as ServerConfig
-    const address = await server.listen(secrets.port)
+    const address = await server.listen(config.port)
     console.log(`Server is listening at: \x1b[36m${address}\x1b[0m`)
   } catch (err) {
     server.log.error(err)
