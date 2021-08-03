@@ -1,17 +1,11 @@
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 
-import config, { ServerState } from '../config'
-import pool from '../database'
+import Database, { pool } from '../database'
 import randomString from '../utils/random-string'
-
-const checkDuplicate = async (shortened: string): Promise<boolean> => {
-  const existed = await pool.query(`SELECT COUNT(*) AS count FROM urls WHERE shortened = '${shortened}';`)
-  return existed[0].count ? true : false
-}
+import State, { ServerState } from '../utils/state-codes'
 
 interface APIQuery {
-  key: string
   full: string
   dest: string
 }
@@ -22,43 +16,42 @@ interface APIReply extends ServerState {
 
 const api: FastifyPluginAsync = async (server) => {
   server.get<{ Querystring: APIQuery }>('/api/shorten', async (request): Promise<APIReply> => {
-    const { query } = request
+    const { query, cookies, unsignCookie } = request
 
-    if (!('key' in query) || !config.key.includes(query.key)) {
-      return {
-        code: 100,
-        message: 'Not authorized.'
-      }
+    if (!('token' in cookies)) {
+      return State.error(101)
+    }
+
+    const decodedCookies = unsignCookie(cookies.token)
+    if (!decodedCookies.valid) {
+      return State.error(101)
+    }
+
+    if (!await Database.exists('tokens', 'token', decodedCookies.value as string)) {
+      return State.error(101)
     }
 
     if (!('full' in query)) {
-      return {
-        code: 101,
-        message: 'No data sent.'
-      }
+      return State.error(102)
     }
 
     let shortened = ''
     if ('dest' in query && query.dest) {
-      const existed = await checkDuplicate(query.dest)
+      const existed = await Database.exists('tokens', 'urls', query.dest)
       if (existed) {
-        return {
-          code: 102,
-          message: 'The destination URL is duplicated.'
-        }
+        return State.error(103)
       }
       shortened = query.dest
     } else {
       do {
         shortened = randomString(6)
-      } while (await checkDuplicate(shortened))
+      } while (await Database.exists('tokens', 'urls', shortened))
     }
 
-    await pool.query(`INSERT INTO urls (full, shortened) VALUES ('${query.full}', '${shortened}');`)
-    return {
-      code: 0,
-      shortened: shortened
-    }
+    await pool.query(
+      `INSERT INTO urls (full, shortened) VALUES ('${query.full}', '${shortened}');`
+    )
+    return State.success({ shortened: shortened })
   })
 }
 

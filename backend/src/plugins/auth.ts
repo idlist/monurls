@@ -1,9 +1,11 @@
 import { FastifyPluginAsync, RequestGenericInterface } from 'fastify'
 import fp from 'fastify-plugin'
+import { DateTime } from 'luxon'
 
-import config, { ServerState } from '../config'
-import pool from '../database'
+import config from '../config'
+import Database, { pool } from '../database'
 import randomString from '../utils/random-string'
+import State, { ServerState } from '../utils/state-codes'
 
 interface LoginRequest extends RequestGenericInterface {
   Querystring: {
@@ -14,10 +16,10 @@ interface LoginRequest extends RequestGenericInterface {
   }
 }
 
-const isTokenValid = async (token: string) => {
-  const res = await pool.query(`SELECT COUNT(*) as count FROM tokens WHERE token = '${token}';`)
-  if (res[0].count) return true
-  return false
+interface LogoutRequest extends RequestGenericInterface {
+  cookies: {
+    token: string
+  }
 }
 
 const auth: FastifyPluginAsync = async (server) => {
@@ -26,30 +28,43 @@ const auth: FastifyPluginAsync = async (server) => {
 
     if ('token' in cookies) {
       const decodedToken = unsignCookie(cookies.token)
-      if (decodedToken.valid && await isTokenValid(decodedToken.value as string)) {
-        return {
-          code: 0
-        }
+      if (decodedToken.valid && await Database.exists('tokens', 'token', decodedToken.value as string)) {
+        return State.success()
       }
     }
 
     if ('key' in query && config.key.includes(query.key)) {
       const token = randomString(64)
-      pool.query(`INSERT INTO tokens (token) VALUES ('${token}');`)
+      const expire = DateTime.local().plus({ days: 90 })
+      const timestamp = expire.toFormat('yyyy-MM-dd hh:mm:ss')
+      pool.query(
+        `INSERT INTO tokens (token, expire) VALUES ('${token}', '${timestamp}');`
+      )
       reply.setCookie('token', token, {
         httpOnly: true,
         signed: true,
-        expires: new Date(new Date().getTime() + 90 * 24 * 60 * 60 * 1000)
+        expires: new Date(expire.toMillis())
       })
-      return {
-        code: 0
+      return State.success()
+    }
+
+    return State.error(101)
+  })
+
+  server.get<LogoutRequest>('/api/logout', async (request, reply): Promise<ServerState> => {
+    const { cookies, unsignCookie } = request
+
+    if ('token' in cookies) {
+      const decodedToken = unsignCookie(cookies.token)
+      if (decodedToken.valid) {
+        await pool.query(
+          `DELETE FROM tokens WHERE token = '${decodedToken.value}'`
+        )
       }
     }
 
-    return {
-      code: 100,
-      message: 'Not authorized.'
-    }
+    reply.clearCookie('token')
+    return State.success()
   })
 }
 

@@ -1,16 +1,20 @@
-import { FastifyPluginAsync } from 'fastify'
+import { FastifyPluginAsync, RequestGenericInterface } from 'fastify'
 import fp from 'fastify-plugin'
 
-import pool from '../database'
+import { pool } from '../database'
 
-interface JumpParams {
-  shortenedId: string
+interface JumpRequest extends RequestGenericInterface {
+  Params: {
+    shortenedId: string
+  }
 }
 
 const jump: FastifyPluginAsync = async (server) => {
-  server.get<{ Params: JumpParams }>('/:shortenedId', async (request, reply) => {
+  server.get<JumpRequest>('/:shortenedId', async (request, reply) => {
     const { params } = request
-    const res = await pool.query(`SELECT full FROM urls WHERE shortened = '${params.shortenedId}';`)
+    const res = await pool.query(
+      `SELECT full FROM urls WHERE shortened = '${params.shortenedId}';`
+    )
     if (!res.length) {
       reply.redirect(301, '/')
     } else {
