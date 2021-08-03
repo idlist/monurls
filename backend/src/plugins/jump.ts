@@ -10,7 +10,7 @@ interface JumpParams {
 const jump: FastifyPluginAsync = async (server) => {
   server.get<{ Params: JumpParams }>('/:shortenedId', async (request, reply) => {
     const { params } = request
-    const res = await pool.query(`SELECT full FROM urls WHERE shortened = '${params.shortenedId}'`)
+    const res = await pool.query(`SELECT full FROM urls WHERE shortened = '${params.shortenedId}';`)
     if (!res.length) {
       reply.redirect(301, '/')
     } else {

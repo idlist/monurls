@@ -3,13 +3,17 @@ import React, { useState } from 'react'
 
 import './url-shortener.sass'
 
-const UrlShortener = () => {
+interface UrlShortenerProps {
+  onLogout(): void
+}
+
+const UrlShortener = (props: UrlShortenerProps) => {
   const [fullUrl, setFullUrl] = useState('')
   const [destUrl, setDestUrl] = useState('')
   const [result, setResult] = useState('')
 
   const getShortenedURL = async () => {
-    const res = await axios.get(`http://localhost:17777/api/shorten`, {
+    const res = await axios.get(`https://localhost:17777/api/shorten`, {
       params: {
         full: fullUrl,
         dest: destUrl,

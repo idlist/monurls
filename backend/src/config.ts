@@ -4,6 +4,7 @@ import yaml from 'js-yaml'
 
 interface ServerConfig {
   port: number
+  dev: boolean
   db: {
     host: string
     port: number
@@ -12,6 +13,7 @@ interface ServerConfig {
     password: string
   }
   key: string[]
+  secret: string
 }
 
 const config = yaml.load(readFileSync('./config.yaml', 'utf-8')) as ServerConfig

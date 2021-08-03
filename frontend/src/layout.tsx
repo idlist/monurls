@@ -16,38 +16,31 @@ const Header = () => {
 const App = () => {
   const [login, setLogin] = useState(false)
 
-  const updateLoginState = async (key?: string) => {
-    if (typeof key == 'undefined') {
-      const storedKey = localStorage.getItem('key')
-      if (typeof storedKey == 'string') {
-        key = storedKey
-      }
-    }
-
-    if (typeof key == 'undefined') return
-
-    const res = await axios.get('http://localhost:17777/api/auth', {
+  const loginProcess = async (key?: string) => {
+    const res = await axios.get('https://127.0.0.1:17777/api/login', {
       params: {
-        key: key
+        key: typeof key == 'string' ? key : ''
       }
     })
 
     if ('code' in res.data && res.data.code === 0) {
       setLogin(true)
-      localStorage.setItem('key', key)
     }
   }
 
-  useEffect(() => {
-    updateLoginState()
-  })
+  const logoutProcess = () => {
+    setLogin(false)
+  }
+
+  useEffect(() => { loginProcess() }, [])
 
   return (
     <div className='app'>
       { login
-        ? <UrlShortener />
+        ? <UrlShortener
+          onLogout={ () => { logoutProcess() } } />
         : <LoginPanel
-          onLoginUpdate={ (key) => { updateLoginState(key) } } />
+          onLoginUpdate={ (key) => { loginProcess(key) } } />
       }
     </div>
   )

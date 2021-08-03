@@ -12,11 +12,16 @@ const pool = createPool({
 })
 
 const initDatabase = async () => {
-  await pool.query('CREATE TABLE IF NOT EXISTS urls ('
-    + 'id BIGINT NOT NULL AUTO_INCREMENT, '
-    + 'full TEXT NOT NULL, '
-    + 'shortened VARCHAR(255) UNIQUE NOT NULL, '
-    + 'PRIMARY KEY (id));')
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS urls (
+    id        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    full      TEXT NOT NULL,
+    shortened VARCHAR(255) UNIQUE NOT NULL,
+    PRIMARY KEY (id));`)
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS tokens (
+    token  VARCHAR(255) UNIQUE NOT NULL,
+    PRIMARY KEY (token));`)
 }
 initDatabase()
 

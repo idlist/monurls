@@ -1,23 +1,12 @@
-import { randomInt } from 'crypto'
-
 import { FastifyPluginAsync } from 'fastify'
 import fp from 'fastify-plugin'
 
 import config, { ServerState } from '../config'
 import pool from '../database'
-
-const dict = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-const createShortenedUrl = (length: number): string => {
-  let short = ''
-  for (let i = 0; i < length; i++) {
-    short += dict[randomInt(0, dict.length)]
-  }
-  return short
-}
+import randomString from '../utils/random-string'
 
 const checkDuplicate = async (shortened: string): Promise<boolean> => {
-  const existed = await pool.query(`SELECT COUNT(*) AS count FROM urls WHERE shortened = '${shortened}'`)
+  const existed = await pool.query(`SELECT COUNT(*) AS count FROM urls WHERE shortened = '${shortened}';`)
   return existed[0].count ? true : false
 }
 
@@ -61,11 +50,11 @@ const api: FastifyPluginAsync = async (server) => {
       shortened = query.dest
     } else {
       do {
-        shortened = createShortenedUrl(6)
+        shortened = randomString(6)
       } while (await checkDuplicate(shortened))
     }
 
-    await pool.query(`INSERT INTO urls (full, shortened) VALUES ('${query.full}', '${shortened}')`)
+    await pool.query(`INSERT INTO urls (full, shortened) VALUES ('${query.full}', '${shortened}');`)
     return {
       code: 0,
       shortened: shortened
