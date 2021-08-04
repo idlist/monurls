@@ -17,7 +17,7 @@ const App = () => {
   const [login, setLogin] = useState(false)
 
   const loginProcess = async (key?: string) => {
-    const res = await axios.get('https://127.0.0.1:17777/api/login', {
+    const res = await axios.get('https://localhost:17777/api/login', {
       params: {
         key: typeof key == 'string' ? key : ''
       }

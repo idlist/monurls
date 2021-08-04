@@ -9,6 +9,10 @@
   width: auto
   padding: 1rem
 
+  @media (max-width: $s-screen)
+    grid-template-columns: 1fr
+    row-gap: 0.5rem
+
   input
     @extend %simple-input
 

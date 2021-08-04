@@ -23,8 +23,6 @@ const UrlShortener = (props: UrlShortenerProps) => {
 
     if ('shortened' in res.data) {
       setResult(window.location.href + res.data.shortened)
-    } else {
-      console.log(res.data)
     }
   }
 

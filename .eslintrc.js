@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     browser: true,
+    node: true,
     es2021: true
   },
   extends: [
@@ -22,7 +23,6 @@ module.exports = {
   ],
   rules: {
     'no-unused-vars': 'warn',
-    'no-console': 'warn',
     'semi': ['warn', 'never'],
     'quotes': ['warn', 'single'],
     'indent': ['warn', 2, { 'SwitchCase': 1 }],

@@ -26,7 +26,11 @@ $font-stack: 'Open Sans', 'Segoe UI', sans-serif
 
   cursor: pointer
 
-  -webkit-user-select: none
+  -webkit-user-select: false
+
+  @media (max-width: $s-screen)
+    width: 50%
+    margin: 0 auto
 
   &:hover
     background-color: #666
@@ -36,7 +40,3 @@ $font-stack: 'Open Sans', 'Segoe UI', sans-serif
 
     &:active
       background-color: #999
-
-    @media (max-width: $s-screen)
-      width: 50%
-      margin: 0 auto

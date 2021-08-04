@@ -1,13 +1,15 @@
-import { FastifyPluginAsync } from 'fastify'
+import { FastifyPluginAsync, RequestGenericInterface } from 'fastify'
 import fp from 'fastify-plugin'
 
 import Database, { pool } from '../database'
 import randomString from '../utils/random-string'
 import State, { ServerState } from '../utils/state-codes'
 
-interface APIQuery {
-  full: string
-  dest: string
+interface APIRequest extends RequestGenericInterface {
+  Querystring: {
+    full: string
+    dest: string
+  }
 }
 
 interface APIReply extends ServerState {
@@ -15,7 +17,7 @@ interface APIReply extends ServerState {
 }
 
 const api: FastifyPluginAsync = async (server) => {
-  server.get<{ Querystring: APIQuery }>('/api/shorten', async (request): Promise<APIReply> => {
+  server.get<APIRequest>('/api/shorten', async (request): Promise<APIReply> => {
     const { query, cookies, unsignCookie } = request
 
     if (!('token' in cookies)) {
@@ -37,7 +39,7 @@ const api: FastifyPluginAsync = async (server) => {
 
     let shortened = ''
     if ('dest' in query && query.dest) {
-      const existed = await Database.exists('tokens', 'urls', query.dest)
+      const existed = await Database.exists('urls', 'shortened', query.dest)
       if (existed) {
         return State.error(103)
       }
@@ -45,7 +47,7 @@ const api: FastifyPluginAsync = async (server) => {
     } else {
       do {
         shortened = randomString(6)
-      } while (await Database.exists('tokens', 'urls', shortened))
+      } while (await Database.exists('urls', 'shortened', shortened))
     }
 
     await pool.query(

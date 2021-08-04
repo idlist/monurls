@@ -24,7 +24,7 @@ const server = fastify(config.dev ? HttpsOption : {})
 if (config.dev) {
   server.register(fastifyCors, {
     origin: 'http://localhost:16666',
-    methods: 'GET'
+    methods: 'GET',
   })
 }
 
@@ -37,10 +37,12 @@ server.register(auth)
 server.register(shorten)
 server.register(jump)
 
+
+
 const main = async () => {
   try {
-    const address = await server.listen(config.port, '127.0.0.1')
-    console.log(`Server is listening at: \x1b[36m${address}\x1b[0m`)
+    server.listen(config.port)
+    console.log(`Server is listening at: \x1b[36mhttps://localhost:${config.port}\x1b[0m`)
   } catch (err) {
     server.log.error(err)
     process.exit(1)

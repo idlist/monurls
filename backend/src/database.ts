@@ -22,7 +22,7 @@ const initDatabase = async () => {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS tokens (
       token     VARCHAR(255) UNIQUE NOT NULL,
-      expire    TIMESTAMP,
+      expire    TIMESTAMP NOT NULL,
       PRIMARY KEY (token));`)
 }
 initDatabase()
