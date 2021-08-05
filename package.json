@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "My own Node.js URL shortener.",
   "author": "i'DLisT",
-  "license": "AGPL-3.0-or-later",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/idlist/monurls.git"
@@ -17,9 +17,9 @@
     "dev": "vite",
     "build": "vite build && node backend/scripts/build",
     "compile": "node backend/scripts/build",
-    "preview": "node backend/dist/index",
     "start": "node backend/scripts/build && node backend/dist/index",
     "prod": "vite build && node backend/scripts/build && node backend/dist/index",
+    "host": "node backend/dist/index",
     "count": "cd .. && cloc monurls --exclude-dir=node_modules,dist --include-ext=ts,tsx,sass"
   },
   "dependencies": {

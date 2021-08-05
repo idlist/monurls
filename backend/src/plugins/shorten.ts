@@ -33,7 +33,7 @@ const api: FastifyPluginAsync = async (server) => {
       return State.error(101)
     }
 
-    if (!('full' in query)) {
+    if (!('full' in query) || query.full == '') {
       return State.error(102)
     }
 
