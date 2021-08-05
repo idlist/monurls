@@ -29,15 +29,15 @@ const UrlShortener = (props: UrlShortenerProps) => {
   return (
     <div className='url-shortener'>
       <input
-        type='url' value={ fullUrl }
+        type='url' value={fullUrl}
         placeholder='URL to be shorten'
-        onChange={ (e) => { setFullUrl(e.target.value) } } />
+        onChange={(e) => { setFullUrl(e.target.value) }} />
       <div className='url-shortener__row'>
         <input
-          type='text' value={ destUrl }
+          type='text' value={destUrl}
           placeholder='(Optional) destination URL'
-          onChange={ (e) => { setDestUrl(e.target.value) } } />
-        <button onClick={ () => { getShortenedURL() } }>
+          onChange={(e) => { setDestUrl(e.target.value) }} />
+        <button onClick={() => { getShortenedURL() }}>
           Shorten
         </button>
       </div>
@@ -46,9 +46,9 @@ const UrlShortener = (props: UrlShortenerProps) => {
       </div>
       <div className='url-shortener__row'>
         <input
-          type='url' value={ result } readOnly
+          type='url' value={result} readOnly
           placeholder='Result' />
-        <button onClick={ () => { navigator.clipboard.writeText(result) } }>
+        <button onClick={() => { navigator.clipboard.writeText(result) }}>
           Copy to Clipboard
         </button>
       </div>

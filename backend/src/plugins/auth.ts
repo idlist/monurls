@@ -23,7 +23,7 @@ interface LogoutRequest extends RequestGenericInterface {
 }
 
 const auth: FastifyPluginAsync = async (server) => {
-  server.get<LoginRequest>('/api/login', async (request, reply): Promise<ServerState> => {
+  server.get<LoginRequest>('/auth/login', async (request, reply): Promise<ServerState> => {
     const { query, cookies, unsignCookie } = request
 
     if ('token' in cookies) {
@@ -51,7 +51,7 @@ const auth: FastifyPluginAsync = async (server) => {
     return State.error(101)
   })
 
-  server.get<LogoutRequest>('/api/logout', async (request, reply): Promise<ServerState> => {
+  server.get<LogoutRequest>('/auth/logout', async (request, reply): Promise<ServerState> => {
     const { cookies, unsignCookie } = request
 
     if ('token' in cookies) {

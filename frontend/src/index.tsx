@@ -1,12 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import Layout from './layout'
+import AppContainer from './app'
 import './index.sass'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Layout/>
+    <AppContainer />
   </React.StrictMode>,
   document.getElementById('root')
 )
