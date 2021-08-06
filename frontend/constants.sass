@@ -4,9 +4,6 @@ $l-screen: 768px
 $font-stack: 'Open Sans', 'Segoe UI', sans-serif
 
 %simple-input
-  display: flex
-
-  width: auto
   height: 2rem
   padding: 0rem 0.5rem
 
@@ -18,6 +15,8 @@ $font-stack: 'Open Sans', 'Segoe UI', sans-serif
 
 %simple-button
   height: 2rem
+  width: 100%
+  justify-self: center
 
   border: none
   border-radius: 0
@@ -27,10 +26,6 @@ $font-stack: 'Open Sans', 'Segoe UI', sans-serif
   cursor: pointer
 
   -webkit-user-select: false
-
-  @media (max-width: $s-screen)
-    width: 50%
-    margin: 0 auto
 
   &:hover
     background-color: #666

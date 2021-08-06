@@ -4,11 +4,7 @@ import MessageBar from './message-bar'
 
 import './url-shortener.sass'
 
-interface UrlShortenerProps {
-  onLogout(): void
-}
-
-const UrlShortener = (props: UrlShortenerProps) => {
+const UrlShortener = () => {
   const [fullUrl, setFullUrl] = useState('')
   const [destUrl, setDestUrl] = useState('')
   const [result, setResult] = useState('')
@@ -33,7 +29,7 @@ const UrlShortener = (props: UrlShortenerProps) => {
 
       if ('shortened' in res.data) {
         setResult(window.location.href + res.data.shortened)
-        setSuccessMessage('URL shortened succesfully!')
+        setSuccessMessage('Shortened succesfully!')
       } else {
         setErrorMessage(res.data.message)
       }
@@ -50,32 +46,40 @@ const UrlShortener = (props: UrlShortenerProps) => {
     }
   }
 
+  const cleanMessage = (): void => {
+    setSuccessMessage('')
+    setErrorMessage('')
+  }
+
   return (
     <div className='url-shortener'>
       <input
         type='url' value={fullUrl}
         placeholder='URL to be shorten'
+        onClick={() => { cleanMessage() }}
         onChange={(e) => { setFullUrl(e.target.value) }} />
-      <div className='url-shortener__row'>
+      <div className='url-shortener__w-btn'>
         <input
           type='text' value={destUrl}
           placeholder='(Optional) destination URL'
+          onClick={() => { cleanMessage() }}
           onChange={(e) => { setDestUrl(e.target.value) }} />
         <button onClick={() => { getShortenedURL() }}>
           Shorten
         </button>
       </div>
-      <div className='url-shortener__hr'>
+      <div className='url-shortener__divider'>
         <hr />
       </div>
       <MessageBar
         info='Waiting for input!'
         success={successMessage}
         error={errorMessage} />
-      <div className='url-shortener__row'>
+      <div className='url-shortener__w-btn'>
         <input
           type='url' value={result} readOnly
-          placeholder='Result' />
+          placeholder='Result'
+          onDoubleClick={(e) => {(e.target as HTMLInputElement).select()}} />
         <button onClick={() => { copyToClipboard() }}>
           Copy to Clipboard
         </button>

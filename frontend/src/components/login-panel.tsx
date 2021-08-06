@@ -1,19 +1,21 @@
-import React, { useState, useEffect, KeyboardEvent } from 'react'
+import React, { useState, useEffect, KeyboardEvent, useContext } from 'react'
 import axios from 'axios'
 
 import MessageBar from './message-bar'
+import { LoginContext } from '../app'
 import './login-panel.sass'
 
-interface LoginPanelProps {
-  onLogin(): void
-}
-
-const LoginPanel = (props: LoginPanelProps) => {
+const LoginPanel = () => {
   const [key, setKey] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const loginState = useContext(LoginContext)
 
   const loginProcess = async (key?: string) => {
     const useKey = (typeof key == 'string')
+    if (key === '') {
+      setErrorMessage('No input.')
+      return
+    }
 
     try {
       const res = await axios.get('https://localhost:17777/auth/login', {
@@ -24,17 +26,17 @@ const LoginPanel = (props: LoginPanelProps) => {
 
       if ('code' in res.data) {
         if (res.data.code === 0) {
-          props.onLogin()
           setErrorMessage('')
-        } else {
+          loginState.setLogin(true)
+        } else if (key) {
           setErrorMessage(res.data.message)
         }
       }
     } catch (err) {
       if (useKey) {
         setErrorMessage('Something\'s wrong with the network...')
+        console.log(err)
       }
-      console.log(err)
     }
   }
 
@@ -51,14 +53,14 @@ const LoginPanel = (props: LoginPanelProps) => {
       <MessageBar
         success='Please verify that you are you!'
         error={errorMessage} />
-      <div className='login-panel__row'>
+      <div className='login-panel__w-btn'>
         <input
           type='text' value={key}
           placeholder='Key'
           onChange={(e) => { setKey(e.target.value) }}
           onKeyUp={(e) => { checkEnter(e) }} />
         <button onClick={() => { loginProcess(key) }}>
-          Login
+          Log In
         </button>
       </div>
     </div>

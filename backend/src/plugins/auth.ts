@@ -3,9 +3,10 @@ import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'
 
 import config from '../config'
-import Database, { pool } from '../database'
+import { pool } from '../database'
 import randomString from '../utils/random-string'
 import State, { ServerState } from '../utils/state-codes'
+import verifyCookies from '../utils/verify-cookies'
 
 interface LoginRequest extends RequestGenericInterface {
   Querystring: {
@@ -24,13 +25,10 @@ interface LogoutRequest extends RequestGenericInterface {
 
 const auth: FastifyPluginAsync = async (server) => {
   server.get<LoginRequest>('/auth/login', async (request, reply): Promise<ServerState> => {
-    const { query, cookies, unsignCookie } = request
+    const { query } = request
 
-    if ('token' in cookies) {
-      const decodedToken = unsignCookie(cookies.token)
-      if (decodedToken.valid && await Database.exists('tokens', 'token', decodedToken.value as string)) {
-        return State.success()
-      }
+    if (await verifyCookies(request)) {
+      return State.success()
     }
 
     if ('key' in query && config.key.includes(query.key)) {

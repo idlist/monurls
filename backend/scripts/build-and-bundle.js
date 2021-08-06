@@ -5,7 +5,7 @@ const { resolve } = require('path')
 const { argv } = require('process')
 
 const { build } = require('esbuild')
-const glob = require('glob')
+const { nodeExternalsPlugin } = require('esbuild-node-externals')
 const c = require('chalk')
 
 const distDir = resolve('./backend/dist')
@@ -20,14 +20,17 @@ try {
 
 const main = async () => {
   await build({
-    entryPoints: glob.sync('./backend/src/**/*.ts'),
+    entryPoints: ['./backend/src/index.ts'],
     outdir: './backend/dist',
     bundle: true,
     platform: 'node',
     target: ['node16'],
-    format: 'cjs',
+    format: 'esm',
     minify: argv.includes('--minify') ? true : false,
     sourcemap: argv.includes('--source-map') ? true : false,
+    plugins: [
+      nodeExternalsPlugin()
+    ]
   })
 
   console.log(`Backend file has compiled into ${c.green(distDir)}.`)

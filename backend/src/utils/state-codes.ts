@@ -6,7 +6,10 @@ const StateCodes: TStateCodes = {
   100: 'Unknown issue.',
   101: 'Not authorized.',
   102: 'No data sent.',
-  103: 'The destination URL is duplicated.'
+  103: 'The destination URL is duplicated.',
+  404: 'Not found.',
+  418: 'I\'m a teapot.',
+  429: 'Too many requests.'
 }
 
 interface ServerState {

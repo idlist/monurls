@@ -4,6 +4,7 @@ import fp from 'fastify-plugin'
 import Database, { pool } from '../database'
 import randomString from '../utils/random-string'
 import State, { ServerState } from '../utils/state-codes'
+import verifyCookies from '../utils/verify-cookies'
 
 interface APIRequest extends RequestGenericInterface {
   Querystring: {
@@ -18,20 +19,13 @@ interface APIReply extends ServerState {
 
 const api: FastifyPluginAsync = async (server) => {
   server.get<APIRequest>('/api/shorten', async (request): Promise<APIReply> => {
-    const { query, cookies, unsignCookie } = request
+    const isVeridied = verifyCookies(request)
 
-    if (!('token' in cookies)) {
+    if (!isVeridied) {
       return State.error(101)
     }
 
-    const decodedCookies = unsignCookie(cookies.token)
-    if (!decodedCookies.valid) {
-      return State.error(101)
-    }
-
-    if (!await Database.exists('tokens', 'token', decodedCookies.value as string)) {
-      return State.error(101)
-    }
+    const { query } = request
 
     if (!('full' in query) || query.full == '') {
       return State.error(102)

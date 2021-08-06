@@ -30,7 +30,7 @@ initDatabase()
 class Database {
   static async exists(table: string, column: string, value: string): Promise<boolean> {
     const res = await pool.query(
-      `SELECT COUNT(*) as count FROM ${table} WHERE ${column} = '${value}';`
+      `SELECT COUNT(*) AS count FROM ${table} WHERE ${column} = '${value}';`
     )
     return res[0].count ? true : false
   }
