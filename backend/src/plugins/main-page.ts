@@ -6,7 +6,7 @@ import fastifyStatic from 'fastify-static'
 
 const mainPage: FastifyPluginAsync = async (server) => {
   server.register(fastifyStatic, {
-    root: resolve(process.cwd(), './frontend/dist/')
+    root: resolve('./frontend/dist/')
   })
 
   server.get('/', async (_, reply) => {

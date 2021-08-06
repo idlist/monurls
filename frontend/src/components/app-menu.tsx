@@ -1,10 +1,14 @@
 import React, { useContext } from 'react'
 import axios from 'axios'
 
-import { LoginContext } from '../app'
+import { LoginContext, AppState } from '../app'
 import './app-menu.sass'
 
-const AppMenu = () => {
+interface AppMenuProps {
+  onSwitchApp(newApp: AppState): void
+}
+
+const AppMenu = (props: AppMenuProps) => {
   const loginState = useContext(LoginContext)
 
   const logoutProcess = async () => {
@@ -21,7 +25,18 @@ const AppMenu = () => {
 
   return (
     <div className='app-menu'>
-      <div>Menu</div>
+      <div className='app-menu__tags'>
+        <a
+          className='app-menu__tags-item'
+          onClick={() => { props.onSwitchApp('shortener') }}>
+          Shortener
+        </a>
+        <a
+          className='app-menu__tags-item'
+          onClick={() => { props.onSwitchApp('manager') }}>
+          Link Manager
+        </a>
+      </div>
       <button onClick={() => { logoutProcess() }}>
         Log Out
       </button>

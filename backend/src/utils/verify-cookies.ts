@@ -1,5 +1,6 @@
 import { FastifyRequest } from 'fastify'
-import Database from '../database'
+import { DateTime } from 'luxon'
+import { pool } from '../database'
 
 const verifyCookies = async (request: FastifyRequest): Promise<boolean> => {
   const { cookies, unsignCookie } = request
@@ -13,7 +14,12 @@ const verifyCookies = async (request: FastifyRequest): Promise<boolean> => {
     return false
   }
 
-  if (!await Database.exists('tokens', 'token', decodedCookies.value as string)) {
+  const res = await pool.query(`
+    SELECT * FROM tokens WHERE token = '${decodedCookies.value}'
+    AND expire > '${DateTime.local().toFormat('yyyy-MM-dd hh:mm:ss')}';
+  `)
+
+  if (!res.length) {
     return false
   }
 

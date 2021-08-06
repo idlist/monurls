@@ -17,12 +17,12 @@ const initDatabase = async () => {
       id        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
       full      TEXT NOT NULL,
       shortened VARCHAR(255) UNIQUE NOT NULL,
-      expire    TIMESTAMP,
+      expire    TIMESTAMP NULL,
       PRIMARY KEY (id));`)
   await pool.query(`
     CREATE TABLE IF NOT EXISTS tokens (
       token     VARCHAR(255) UNIQUE NOT NULL,
-      expire    TIMESTAMP NOT NULL,
+      expire    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (token));`)
 }
 initDatabase()

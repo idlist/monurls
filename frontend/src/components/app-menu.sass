@@ -14,3 +14,28 @@
     @media (max-width: $s-screen)
       width: 100%
       margin: 0 auto
+
+  &__tags
+    display: flex
+    column-gap: 0.5rem
+
+  &__tags-item
+    padding: 0.5rem 1rem
+
+    color: #333
+    border: 1px solid #333
+    background-color: #eee
+
+    cursor: pointer
+    -webkit-user-select: none
+
+    &:hover
+      @media (min-width: $s-screen)
+        color: #999
+        border-color: #999
+        background-color: #f0f0f0
+
+    &:active
+      color: #ccc
+      border-color: #ccc
+      background-color: #fafafa

@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState } from 'react'
 
 import AppMenu from './components/app-menu'
-import UrlShortener from './components/url-shortener'
 import LoginPanel from './components/login-panel'
+import UrlShortener from './components/url-shortener'
+import LinkManager from './components/link-manager'
 import './app.sass'
 
 const Header = () => {
@@ -23,7 +24,10 @@ const LoginContext = createContext<LoginContextType>({
   setLogin: () => { }
 })
 
+type AppState = 'shortener' | 'manager'
+
 const App = () => {
+  const [app, setApp] = useState<AppState>('shortener')
   const loginState = useContext(LoginContext)
 
   return (
@@ -31,8 +35,14 @@ const App = () => {
       {loginState.login
         ? (
           <>
-            <AppMenu />
-            <UrlShortener />
+            <AppMenu
+              onSwitchApp={ (newApp) => { setApp(newApp) } }/>
+            {app == 'shortener'
+              && <UrlShortener />
+            }
+            {app == 'manager'
+              && <LinkManager />
+            }
           </>
         )
         : <LoginPanel />
@@ -52,12 +62,13 @@ const AppContainer = () => {
   return (
     <LoginContext.Provider value={loginState}>
       <Header />
-      <div className='container'>
+      <article className='container'>
         <App />
-      </div>
+      </article>
     </LoginContext.Provider>
   )
 }
 
 export default AppContainer
 export { LoginContext }
+export type { AppState }

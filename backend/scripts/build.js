@@ -22,7 +22,7 @@ const main = async () => {
   await build({
     entryPoints: glob.sync('./backend/src/**/*.ts'),
     outdir: './backend/dist',
-    bundle: true,
+    bundle: false,
     platform: 'node',
     target: ['node16'],
     format: 'cjs',
