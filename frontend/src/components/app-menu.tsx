@@ -5,6 +5,7 @@ import { LoginContext, AppState } from '../app'
 import './app-menu.sass'
 
 interface AppMenuProps {
+  selected: AppState
   onSwitchApp(newApp: AppState): void
 }
 
@@ -27,13 +28,12 @@ const AppMenu = (props: AppMenuProps) => {
     <div className='app-menu'>
       <div className='app-menu__tags'>
         <a
-          className='app-menu__tags-item'
+          className={`app-menu__tags-item${props.selected == 'shortener' ? '--selected' : ''}`}
           onClick={() => { props.onSwitchApp('shortener') }}>
           Shortener
         </a>
-        <div className='app-menu__divider'/>
         <a
-          className='app-menu__tags-item'
+          className={`app-menu__tags-item${props.selected == 'manager' ? '--selected' : ''}`}
           onClick={() => { props.onSwitchApp('manager') }}>
           Link Manager
         </a>

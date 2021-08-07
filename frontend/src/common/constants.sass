@@ -1,3 +1,5 @@
+@import colors
+
 $s-screen: 640px
 $l-screen: 768px
 
@@ -8,19 +10,20 @@ $font-stack: 'Open Sans', 'Segoe UI', sans-serif
   padding: 0rem 0.5rem
 
   border: 1px solid #aaa
-  border-radius: 0
+  border-radius: 1rem
 
   &:focus
     border-color: #333
 
 %simple-button
-  padding: 0.5rem
+  height: 2rem
   width: 100%
   justify-self: end
 
   border: none
-  border-radius: 0
+  border-radius: 1rem
   background-color: #333
+  background: $color-black
   color: #fff
 
   cursor: pointer
@@ -29,9 +32,11 @@ $font-stack: 'Open Sans', 'Segoe UI', sans-serif
   &:hover
     @media (min-width: $s-screen)
       background-color: #666
+      background: $color-gray
 
     &:active
       background-color: #999
+      background: $color-gray-light
 
 %absolute
   position: absolute

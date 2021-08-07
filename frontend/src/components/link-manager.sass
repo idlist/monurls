@@ -1,6 +1,7 @@
 @import ../common/constants
 
 $pager-size: 2.5rem
+$canvas-size: 3rem
 
 .link-manager
   padding: 1rem
@@ -39,6 +40,8 @@ $pager-size: 2.5rem
   height: $pager-size
   width: $pager-size
 
+  -webkit-user-select: none
+
   &--selected
     @extend .pager-item
 
@@ -50,35 +53,31 @@ $pager-size: 2.5rem
 
   &__selector
     @extend %absolute
+    top: -0.25rem
+    left: -0.25rem
 
-    height: $pager-size
-    width: $pager-size
+    height: $canvas-size
+    width: $canvas-size
 
     z-index: -1
 
   &__hover
     @extend %absolute
+    top: -0.25rem
+    left: -0.25rem
 
-    height: $pager-size
-    width: $pager-size
+    height: $canvas-size
+    width: $canvas-size
 
     visibility: hidden
     pointer-events: all
 
     &:hover
-      visibility: visible
+      @media (min-width: $s-screen)
+        visibility: visible
 
     &:active
       visibility: visible
 
-      rect
-        stroke: #333
-
-  &__active
-    @extend %absolute
-
-    height: $pager-size
-    width: $pager-size
-
-    visibility: hidden
-    pointer-events: all
+      circle
+        stroke: url(#gradient-hover-black)

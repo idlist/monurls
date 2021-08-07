@@ -36,6 +36,7 @@ const App = () => {
         ? (
           <>
             <AppMenu
+              selected={app}
               onSwitchApp={(newApp) => { setApp(newApp) }} />
             {app == 'shortener'
               && <UrlShortener />

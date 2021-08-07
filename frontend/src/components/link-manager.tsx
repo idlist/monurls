@@ -8,25 +8,45 @@ interface PagerItemProps {
   selected?: boolean
 }
 
-const PagerSize = '2.5rem'
+const PagerCenter = '1.5rem'
 
 const PagerItem = (props: PagerItemProps) => {
   return (
     <div className={'pager-item__container'}>
       <svg className='pager-item__hover'>
-        <rect
-          x='0' y='0'
-          width={PagerSize} height={PagerSize}
-          stroke='#999' strokeWidth='2px'
+        <defs>
+          <linearGradient
+            id='gradient-hover-gray'
+            gradientTransform='translate(-0.25, 0) rotate(-30)'>
+            <stop offset='0%' stop-color='#666' />
+            <stop offset='100%' stop-color='#999' />
+          </linearGradient>
+          <linearGradient
+            id='gradient-hover-black'
+            gradientTransform='translate(-0.25, 0) rotate(-30)'>
+            <stop offset='0%' stop-color='#333' />
+            <stop offset='100%' stop-color='#666' />
+          </linearGradient>
+        </defs>
+        <circle
+          cx={PagerCenter} cy={PagerCenter} r='1.125rem'
+          strokeWidth='0.25rem' stroke='url(#gradient-hover-gray)'
           fill='none' />
       </svg>
       {props.selected
         && (
           <svg className={'pager-item__selector'}>
-            <rect
-              x='0' y='0'
-              width={PagerSize} height={PagerSize}
-              fill='#333' />
+            <defs>
+              <linearGradient
+                id='gradient-selector'
+                gradientTransform='translate(-0.25, 0) rotate(-30)'>
+                <stop offset='0%' stop-color='#333' />
+                <stop offset='100%' stop-color='#666' />
+              </linearGradient>
+            </defs>
+            <circle
+              cx={PagerCenter} cy={PagerCenter} r='1.25rem'
+              fill='url(#gradient-selector)' />
           </svg>
         )
       }
