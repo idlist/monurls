@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useContext, KeyboardEvent, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useContext, KeyboardEvent } from 'react'
 import axios from 'axios'
 
 import MessageBar from './message-bar'
 import { LoginContext } from '../app'
+import { useHidden } from '../common/custom-hooks'
 import './login-panel.sass'
 
 const LoginPanel = () => {
-  const [hidden, setHidden] = useState(true)
+  const hidden = useHidden()
 
   const [key, setKey] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -50,7 +51,6 @@ const LoginPanel = () => {
   }
 
   useEffect(() => { loginProcess() }, [])
-  useLayoutEffect(() => { setHidden(false) }, [])
 
   return (
     <div className={ `login-panel ${hidden ? 'hidden' : ''}` }>

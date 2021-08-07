@@ -1,0 +1,84 @@
+@import ../common/constants
+
+$pager-size: 2.5rem
+
+.link-manager
+  padding: 1rem
+
+  &__search
+    display: grid
+    grid-template-columns: 3fr 1fr
+    column-gap: 1rem
+    align-items: center
+
+    @media (max-width: $s-screen)
+      grid-template-columns: 1fr
+      row-gap: 0.5rem
+
+  input
+    @extend %simple-input
+
+  button
+    @extend %simple-button
+
+    @media (max-width: $s-screen)
+      width: 50%
+
+  &__pager
+    display: flex
+    justify-content: center
+    column-gap: 0.5rem
+
+    padding: 1rem 0
+
+.pager-item
+  display: grid
+  justify-items: center
+  align-items: center
+
+  height: $pager-size
+  width: $pager-size
+
+  &--selected
+    @extend .pager-item
+
+    color: #fff
+
+  &__container
+    position: relative
+    cursor: pointer
+
+  &__selector
+    @extend %absolute
+
+    height: $pager-size
+    width: $pager-size
+
+    z-index: -1
+
+  &__hover
+    @extend %absolute
+
+    height: $pager-size
+    width: $pager-size
+
+    visibility: hidden
+    pointer-events: all
+
+    &:hover
+      visibility: visible
+
+    &:active
+      visibility: visible
+
+      rect
+        stroke: #333
+
+  &__active
+    @extend %absolute
+
+    height: $pager-size
+    width: $pager-size
+
+    visibility: hidden
+    pointer-events: all

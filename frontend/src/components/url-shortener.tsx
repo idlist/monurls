@@ -1,11 +1,12 @@
 import axios from 'axios'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import MessageBar from './message-bar'
+import { useHidden } from '../common/custom-hooks'
 import './url-shortener.sass'
 
 const UrlShortener = () => {
-  const [hidden, setHidden] = useState(true)
+  const hidden = useHidden()
 
   const [fullUrl, setFullUrl] = useState('')
   const [destUrl, setDestUrl] = useState('')
@@ -53,10 +54,8 @@ const UrlShortener = () => {
     setErrorMessage('')
   }
 
-  useLayoutEffect(() => { setHidden(false) }, [])
-
   return (
-    <div className={`url-shortener ${hidden ? 'hidden' : ''}`}>
+    <div className={`url-shortener ${hidden}`.trim()}>
       <input
         type='url' value={fullUrl}
         placeholder='URL to be shorten'

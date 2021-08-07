@@ -27,7 +27,7 @@ const LoginContext = createContext<LoginContextType>({
 type AppState = 'shortener' | 'manager'
 
 const App = () => {
-  const [app, setApp] = useState<AppState>('shortener')
+  const [app, setApp] = useState<AppState>('manager')
   const loginState = useContext(LoginContext)
 
   return (
