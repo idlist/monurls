@@ -1,10 +1,12 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-import MessageBar from './message-bar'
+import React, { useLayoutEffect, useState } from 'react'
 
+import MessageBar from './message-bar'
 import './url-shortener.sass'
 
 const UrlShortener = () => {
+  const [hidden, setHidden] = useState(true)
+
   const [fullUrl, setFullUrl] = useState('')
   const [destUrl, setDestUrl] = useState('')
   const [result, setResult] = useState('')
@@ -51,8 +53,10 @@ const UrlShortener = () => {
     setErrorMessage('')
   }
 
+  useLayoutEffect(() => { setHidden(false) }, [])
+
   return (
-    <div className='url-shortener'>
+    <div className={`url-shortener ${hidden ? 'hidden' : ''}`}>
       <input
         type='url' value={fullUrl}
         placeholder='URL to be shorten'
@@ -79,7 +83,7 @@ const UrlShortener = () => {
         <input
           type='url' value={result} readOnly
           placeholder='Result'
-          onDoubleClick={(e) => {(e.target as HTMLInputElement).select()}} />
+          onDoubleClick={(e) => { (e.target as HTMLInputElement).select() }} />
         <button onClick={() => { copyToClipboard() }}>
           Copy to Clipboard
         </button>

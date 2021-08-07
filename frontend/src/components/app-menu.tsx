@@ -31,6 +31,7 @@ const AppMenu = (props: AppMenuProps) => {
           onClick={() => { props.onSwitchApp('shortener') }}>
           Shortener
         </a>
+        <div className='app-menu__divider'/>
         <a
           className='app-menu__tags-item'
           onClick={() => { props.onSwitchApp('manager') }}>

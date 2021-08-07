@@ -36,7 +36,7 @@ const App = () => {
         ? (
           <>
             <AppMenu
-              onSwitchApp={ (newApp) => { setApp(newApp) } }/>
+              onSwitchApp={(newApp) => { setApp(newApp) }} />
             {app == 'shortener'
               && <UrlShortener />
             }
@@ -52,7 +52,7 @@ const App = () => {
 }
 
 const AppContainer = () => {
-  const [login, setLogin] = useState(false)
+  const [login, setLogin] = useState(true)
 
   const loginState = {
     login: login,

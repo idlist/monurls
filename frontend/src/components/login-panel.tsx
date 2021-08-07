@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, KeyboardEvent } from 'react'
+import React, { useState, useEffect, useContext, KeyboardEvent, useLayoutEffect } from 'react'
 import axios from 'axios'
 
 import MessageBar from './message-bar'
@@ -6,8 +6,11 @@ import { LoginContext } from '../app'
 import './login-panel.sass'
 
 const LoginPanel = () => {
+  const [hidden, setHidden] = useState(true)
+
   const [key, setKey] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+
   const loginState = useContext(LoginContext)
 
   const loginProcess = async (key?: string) => {
@@ -47,9 +50,10 @@ const LoginPanel = () => {
   }
 
   useEffect(() => { loginProcess() }, [])
+  useLayoutEffect(() => { setHidden(false) }, [])
 
   return (
-    <div className='login-panel'>
+    <div className={ `login-panel ${hidden ? 'hidden' : ''}` }>
       <MessageBar
         success='Please verify that you are you!'
         error={errorMessage} />

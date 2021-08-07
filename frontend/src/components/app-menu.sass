@@ -1,4 +1,4 @@
-@import ../../constants
+@import ../common/constants
 
 .app-menu
   display: grid
@@ -17,13 +17,16 @@
 
   &__tags
     display: flex
-    column-gap: 0.5rem
+    justify-self: start
+    align-items: center
+    border: 1px solid #333
+
+    background-color: #eee
 
   &__tags-item
     padding: 0.5rem 1rem
 
     color: #333
-    border: 1px solid #333
     background-color: #eee
 
     cursor: pointer
@@ -32,10 +35,14 @@
     &:hover
       @media (min-width: $s-screen)
         color: #999
-        border-color: #999
         background-color: #f0f0f0
 
     &:active
       color: #ccc
-      border-color: #ccc
       background-color: #fafafa
+
+  &__divider
+    height: 1.5rem
+
+    border: none
+    border-left: 1px solid #333
