@@ -34,7 +34,8 @@ const auth: FastifyPluginAsync = async (server) => {
       const expire = DateTime.local().plus({ days: 90 })
       const timestamp = expire.toFormat('yyyy-MM-dd hh:mm:ss')
 
-      pool.query(`INSERT INTO tokens (token, expire) VALUES ('${token}', '${timestamp}');`)
+      pool.query('INSERT INTO tokens (token, expire) VALUES (?, ?)',
+        [token, timestamp])
       reply.setCookie('token', token, {
         httpOnly: true,
         signed: true,
@@ -52,7 +53,7 @@ const auth: FastifyPluginAsync = async (server) => {
     if ('token' in cookies) {
       const decodedToken = unsignCookie(cookies.token)
       if (decodedToken.valid) {
-        await pool.query(`DELETE FROM tokens WHERE token = '${decodedToken.value}'`)
+        await pool.query(`DELETE FROM tokens WHERE token = ?`, decodedToken.value)
       }
     }
 

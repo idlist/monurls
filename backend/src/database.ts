@@ -18,20 +18,19 @@ const initDatabase = async () => {
       full      TEXT NOT NULL,
       shortened VARCHAR(255) UNIQUE NOT NULL,
       expire    TIMESTAMP NULL,
-      PRIMARY KEY (id));`)
+      PRIMARY KEY (id))`)
   await pool.query(`
     CREATE TABLE IF NOT EXISTS tokens (
       token     VARCHAR(255) UNIQUE NOT NULL,
       expire    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      PRIMARY KEY (token));`)
+      PRIMARY KEY (token))`)
 }
 initDatabase()
 
 class Database {
   static async exists(table: string, column: string, value: string): Promise<boolean> {
-    const res = await pool.query(
-      `SELECT COUNT(*) AS count FROM ${table} WHERE ${column} = '${value}';`
-    )
+    const res = await pool.query('SELECT COUNT(*) AS count FROM ? WHERE ? = ?',
+      [table, column, value])
     return res[0].count ? true : false
   }
 }

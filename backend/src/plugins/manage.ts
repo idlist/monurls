@@ -51,21 +51,28 @@ const manage: FastifyPluginAsync = async (server) => {
     const { query } = request
 
     let page = validateQuery(query, 'page', 1) - 1
-    const limit = validateQuery(query, 'limit', 20)
+    let limit = validateQuery(query, 'limit', 20)
 
-    const lengthQuery = await pool.query(`SELECT COUNT(*) as count FROM urls;`)
+    const lengthQuery = await pool.query('SELECT COUNT(*) as count FROM urls')
     const length = lengthQuery[0].count
 
     const maxPage = Math.floor(length / limit)
     if (page > maxPage) page = maxPage
 
-    let dataQuery = await pool.query(`
-      SELECT * FROM urls ORDER BY id
-      LIMIT ${limit} OFFSET ${page * limit};
-    `)
-    delete (dataQuery.meta)
+    const listQuery = await pool.query('SELECT * FROM urls ORDER BY id LIMIT ? OFFSET ?',
+      [limit, page * limit]) as LinkData[]
+    let list: LinkData[] = []
 
-    return State.success({ length: length, list: dataQuery })
+    for (const { id, full, shortened, expire } of listQuery) {
+      list.push({
+        id,
+        full,
+        shortened,
+        expire // TODO: May need to adjust format of 'expire' when 'expire' is installed
+      })
+    }
+
+    return State.success({ length, list })
   })
 
   server.get<DeleteRequest>('/api/delete', async (request): Promise<ServerState> => {

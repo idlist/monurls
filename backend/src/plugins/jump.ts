@@ -16,7 +16,7 @@ const jump: FastifyPluginAsync = async (server) => {
     }
   }, async (request, reply) => {
     const { params } = request
-    const res = await pool.query(`SELECT full FROM urls WHERE shortened = '${params.shortenedId}';`)
+    const res = await pool.query('SELECT full FROM urls WHERE shortened = ?', params.shortenedId)
     if (!res.length) {
       reply.redirect(303, '/')
     } else {

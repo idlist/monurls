@@ -40,9 +40,11 @@ const shorten: FastifyPluginAsync = async (server) => {
     let expire: string | undefined
 
     if (typeof expire == 'string') {
-      await pool.query(`INSERT INTO urls (full, shortened, expire) VALUES ('${query.full}', '${shortened}', '${expire}');`)
+      await pool.query('INSERT INTO urls (full, shortened, expire) VALUES (?, ?, ?)',
+        [query.full, shortened, expire])
     } else {
-      await pool.query(`INSERT INTO urls (full, shortened) VALUES ('${query.full}', '${shortened}');`)
+      await pool.query(`INSERT INTO urls (full, shortened) VALUES (?, ?)`,
+        [query.full, shortened])
     }
 
     return State.success({ shortened: shortened })
