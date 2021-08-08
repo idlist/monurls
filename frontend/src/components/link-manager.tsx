@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 
 import MessageBar from './message-bar'
-import { useHidden, useMessage } from '../common/custom-hooks'
+import { MessageAction, useHidden, useMessage } from '../common/custom-hooks'
 import './link-manager.sass'
+
 import IconJumpTo from '../assets/jump-to.png'
 import IconExpire from '../assets/expire.png'
+import IconHashtag from '../assets/hashtag.png'
 
 interface PagerItemProps {
   display: number | string
@@ -171,15 +173,24 @@ const TestData: LinkDataType[] = [
 
 interface LinkListProps {
   list: LinkDataType[]
+  onEmitMessage(action: MessageAction): void
+  onDelete(id: number): void
 }
 
 const LinkList = (props: LinkListProps) => {
+  const copyToClipboard = (shortened: string) => {
+    navigator.clipboard.writeText(window.location.href + shortened)
+    props.onEmitMessage({ success: 'Copied to clipboard!' })
+  }
+
   return (
     <ul className='link-manager__list'>
       {props.list.map(item => (
         <li className='link-item' key={item.id}>
           <span className='link-item__id'>
-            {'# ' + item.id}
+            <img className='icon-sharp'
+              src={IconHashtag} />
+            <span>{item.id}</span>
           </span>
           <a className='link-item__full'
             href={item.full}
@@ -189,7 +200,7 @@ const LinkList = (props: LinkListProps) => {
           <a className='link-item__shortened'
             href={window.location.href + item.shortened}
             target='_blank' rel='noreferrer noopener'>
-            <img className='icon-jump'
+            <img className='icon-jump-to'
               src={IconJumpTo} alt='jump-to' />
             <span>{item.shortened}</span>
           </a>
@@ -199,15 +210,18 @@ const LinkList = (props: LinkListProps) => {
               src={IconExpire} alt='expire' />
           </span>
           <button className='link-item--button link-item__copy'
-            onClick={() => {}}>
+            onClick={() => { copyToClipboard(item.shortened) }}>
             Copy
           </button>
-          <button className='link-item--button link-item__manage'>
+          <button className='link-item--button link-item__manage'
+            onClick={() => { /* TODO */ }}>
             Manage
           </button>
-          <button className='link-item--button link-item__delete'>
+          <button className='link-item--button link-item__delete'
+            onClick={() => { props.onDelete(item.id) }}>
             Delete
           </button>
+          {/* TODO: Simple manager */}
         </li>
       ))}
     </ul>
@@ -218,9 +232,9 @@ const LinkManager = () => {
   const hidden = useHidden()
 
   const [keyword, setKeyword] = useState('')
-  const [pageLength, setPageLength] = useState(20)
-  const [pageNum, setPageNum] = useState(1)
-  const [list, setList] = useState(TestData)
+  const [pageLength, setPageLength] = useState(20 /* TODO */)
+  const [pageNum, setPageNum] = useState(1 /* TODO */)
+  const [list, setList] = useState(TestData /* TODO */)
 
   const [message, setMessage] = useMessage('All links are here!')
 
@@ -231,6 +245,7 @@ const LinkManager = () => {
       <div className='link-manager__search'>
         <input
           type='text' value={keyword}
+          onClick={(e) => { setMessage({ info: true }) }}
           onChange={(e) => { setKeyword(e.target.value) }}
           placeholder='Full URL, shortened URL or ID...' />
         <button>
@@ -243,7 +258,9 @@ const LinkManager = () => {
         selected={pageNum}
         onUpdate={(page) => { setPageNum(page) }} />
       <LinkList
-        list={list} />
+        list={list}
+        onEmitMessage={(action) => { setMessage(action) }}
+        onDelete={(id) => { /* TODO */ }} />
       <Pager
         length={pageLength}
         selected={pageNum}

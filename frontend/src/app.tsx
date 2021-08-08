@@ -30,26 +30,21 @@ const App = () => {
   const [app, setApp] = useState<AppState>('manager')
   const loginState = useContext(LoginContext)
 
-  return (
-    <>
-      {loginState.login
-        ? (
-          <>
-            <AppMenu
-              selected={app}
-              onSwitchApp={(newApp) => { setApp(newApp) }} />
-            {app == 'shortener'
-              && <UrlShortener />
-            }
-            {app == 'manager'
-              && <LinkManager />
-            }
-          </>
-        )
-        : <LoginPanel />
-      }
-    </>
-  )
+  return loginState.login
+    ? (
+      <>
+        <AppMenu
+          selected={app}
+          onSwitchApp={(newApp) => { setApp(newApp) }} />
+        {app == 'shortener'
+          && <UrlShortener />
+        }
+        {app == 'manager'
+          && <LinkManager />
+        }
+      </>
+    )
+    : <LoginPanel />
 }
 
 const AppContainer = () => {

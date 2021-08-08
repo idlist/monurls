@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useReducer } from 'react'
+import { useState, useLayoutEffect, useReducer, useEffect } from 'react'
 
 type DisplayState = 'hidden' | ''
 
@@ -36,7 +36,7 @@ const messageReducer = (state: MessageState, action: MessageAction): MessageStat
   } else if ('success' in action) {
     return {
       ...state,
-      success: action.error ?? state.error
+      success: action.success ?? state.success
     }
   } else if ('error' in action) {
     return {
@@ -57,3 +57,4 @@ const useMessage = (message: string) => {
 }
 
 export { useHidden, useMessage }
+export type { MessageAction }
