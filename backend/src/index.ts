@@ -11,10 +11,11 @@ import config from './config'
 import State from './utils/state-codes'
 import './database'
 
-import mainPage from './plugins/main-page'
-import auth from './plugins/auth'
-import shorten from './plugins/shorten'
-import jump from './plugins/jump'
+import MainPage from './plugins/main-page'
+import Auth from './plugins/auth'
+import Shorten from './plugins/shorten'
+import Jump from './plugins/jump'
+import Manage from './plugins/manage'
 
 const HttpsOption: FastifyHttpsOptions<Server> = {
   https: {
@@ -34,14 +35,15 @@ if (config.dev) {
 
 server.register(fastifyCookie, { secret: config.secret })
 server.register(fastifyRateLimit, {
-  global: false,
+  max: 100,
   timeWindow: 1000,
   errorResponseBuilder: () => State.error(429)
 })
-server.register(mainPage)
-server.register(auth)
-server.register(shorten)
-server.register(jump)
+server.register(MainPage)
+server.register(Auth)
+server.register(Shorten)
+server.register(Jump)
+server.register(Manage)
 
 server.setNotFoundHandler({
   preHandler: () => {

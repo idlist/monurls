@@ -137,14 +137,14 @@ const Pager = (props: PagerProps) => {
   )
 }
 
-interface LinkDataType {
+interface LinkData {
   id: number
   full: string
   shortened: string
   expire: string
 }
 
-const TestData: LinkDataType[] = [
+const TestData: LinkData[] = [
   {
     id: 1,
     full: 'https://github.com/',
@@ -172,7 +172,7 @@ const TestData: LinkDataType[] = [
 ]
 
 interface LinkListProps {
-  list: LinkDataType[]
+  list: LinkData[]
   onEmitMessage(action: MessageAction): void
   onDelete(id: number): void
 }

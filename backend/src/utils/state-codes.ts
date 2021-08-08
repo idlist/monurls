@@ -1,8 +1,8 @@
-interface TStateCodes {
+interface StateType {
   [property: number]: string
 }
 
-const StateCodes: TStateCodes = {
+const StateCodes: StateType = {
   100: 'Unknown issue.',
   101: 'Not authorized.',
   102: 'No data sent.',
@@ -24,7 +24,7 @@ class State {
       ...payload
     }
   }
-  static error(code: number): ServerState {
+  static error(code: keyof StateType): ServerState {
     return {
       code: code,
       message: StateCodes[code]

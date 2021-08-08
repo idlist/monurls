@@ -1,4 +1,4 @@
-import { FastifyPluginAsync, RequestGenericInterface } from 'fastify'
+import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'
 
@@ -8,7 +8,7 @@ import randomString from '../utils/random-string'
 import State, { ServerState } from '../utils/state-codes'
 import verifyCookies from '../utils/verify-cookies'
 
-interface LoginRequest extends RequestGenericInterface {
+interface LoginRequest extends RequestGI {
   Querystring: {
     key: string
   }
@@ -17,7 +17,7 @@ interface LoginRequest extends RequestGenericInterface {
   }
 }
 
-interface LogoutRequest extends RequestGenericInterface {
+interface LogoutRequest extends RequestGI {
   cookies: {
     token: string
   }
@@ -25,19 +25,16 @@ interface LogoutRequest extends RequestGenericInterface {
 
 const auth: FastifyPluginAsync = async (server) => {
   server.get<LoginRequest>('/auth/login', async (request, reply): Promise<ServerState> => {
-    const { query } = request
+    if (await verifyCookies(request)) return State.success()
 
-    if (await verifyCookies(request)) {
-      return State.success()
-    }
+    const { query } = request
 
     if ('key' in query && config.key.includes(query.key)) {
       const token = randomString(64)
       const expire = DateTime.local().plus({ days: 90 })
       const timestamp = expire.toFormat('yyyy-MM-dd hh:mm:ss')
-      pool.query(
-        `INSERT INTO tokens (token, expire) VALUES ('${token}', '${timestamp}');`
-      )
+
+      pool.query(`INSERT INTO tokens (token, expire) VALUES ('${token}', '${timestamp}');`)
       reply.setCookie('token', token, {
         httpOnly: true,
         signed: true,
@@ -55,9 +52,7 @@ const auth: FastifyPluginAsync = async (server) => {
     if ('token' in cookies) {
       const decodedToken = unsignCookie(cookies.token)
       if (decodedToken.valid) {
-        await pool.query(
-          `DELETE FROM tokens WHERE token = '${decodedToken.value}'`
-        )
+        await pool.query(`DELETE FROM tokens WHERE token = '${decodedToken.value}'`)
       }
     }
 

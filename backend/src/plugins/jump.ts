@@ -1,22 +1,24 @@
-import { FastifyPluginAsync, RequestGenericInterface } from 'fastify'
+import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'
 
 import { pool } from '../database'
 
-interface JumpRequest extends RequestGenericInterface {
+interface JumpRequest extends RequestGI {
   Params: {
     shortenedId: string
   }
 }
 
 const jump: FastifyPluginAsync = async (server) => {
-  server.get<JumpRequest>('/:shortenedId', async (request, reply) => {
+  server.get<JumpRequest>('/:shortenedId', {
+    config: {
+      rateLimit: { max: 5 }
+    }
+  }, async (request, reply) => {
     const { params } = request
-    const res = await pool.query(
-      `SELECT full FROM urls WHERE shortened = '${params.shortenedId}';`
-    )
+    const res = await pool.query(`SELECT full FROM urls WHERE shortened = '${params.shortenedId}';`)
     if (!res.length) {
-      reply.redirect(301, '/')
+      reply.redirect(303, '/')
     } else {
       reply.redirect(303, res[0].full)
     }
