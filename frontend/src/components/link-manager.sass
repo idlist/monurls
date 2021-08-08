@@ -25,20 +25,23 @@ $canvas-size: 3rem
     @media (max-width: $s-screen)
       width: 50%
 
+  &__space
+    height: 2rem
+
   &__pager
     display: flex
     justify-content: center
     column-gap: 0.5rem
 
-    padding: 1rem 0
+    margin: 0.5rem 0
 
 .pager-item
   display: grid
   justify-items: center
   align-items: center
 
-  height: $pager-size
   width: $pager-size
+  height: $pager-size
 
   -webkit-user-select: none
 
@@ -56,8 +59,8 @@ $canvas-size: 3rem
     top: -0.25rem
     left: -0.25rem
 
-    height: $canvas-size
     width: $canvas-size
+    height: $canvas-size
 
     z-index: -1
 
@@ -66,8 +69,8 @@ $canvas-size: 3rem
     top: -0.25rem
     left: -0.25rem
 
-    height: $canvas-size
     width: $canvas-size
+    height: $canvas-size
 
     visibility: hidden
     pointer-events: all
@@ -79,5 +82,8 @@ $canvas-size: 3rem
     &:active
       visibility: visible
 
-      circle
+      .outer
         stroke: url(#gradient-hover-black)
+
+      .inner
+        visibility: hidden
