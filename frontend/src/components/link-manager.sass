@@ -1,4 +1,5 @@
 @import ../common/constants
+@import ../common/colors
 
 $pager-size: 2.5rem
 $canvas-size: 3rem
@@ -16,16 +17,19 @@ $canvas-size: 3rem
       grid-template-columns: 1fr
       row-gap: 0.5rem
 
-  input
-    @extend %simple-input
+    input
+      @include simple-input
 
-  button
-    @extend %simple-button
+    button
+      @include simple-button
 
-    @media (max-width: $s-screen)
-      width: 50%
+      @media (max-width: $s-screen)
+        width: 50%
 
-  &__space
+  &__space-half
+    height: 0.5rem
+
+  &__space-2
     height: 2rem
 
   &__pager
@@ -33,7 +37,10 @@ $canvas-size: 3rem
     justify-content: center
     column-gap: 0.5rem
 
-    margin: 0.5rem 0
+  &__list
+    list-style-type: none
+    padding: 0
+    margin: 1rem 0
 
 .pager-item
   display: grid
@@ -55,7 +62,7 @@ $canvas-size: 3rem
     cursor: pointer
 
   &__selector
-    @extend %absolute
+    @include absolute
     top: -0.25rem
     left: -0.25rem
 
@@ -65,7 +72,7 @@ $canvas-size: 3rem
     z-index: -1
 
   &__hover
-    @extend %absolute
+    @include absolute
     top: -0.25rem
     left: -0.25rem
 
@@ -87,3 +94,94 @@ $canvas-size: 3rem
 
       .inner
         visibility: hidden
+
+.link-item
+  display: grid
+  grid-template-columns: repeat(12, 1fr)
+  grid-auto-rows: minmax(max-content, 1.5rem)
+  column-gap: 0.5rem
+  row-gap: 0.5rem
+  align-items: center
+
+  padding: 0.5rem
+  border-top: 1px solid #aaa
+
+  &:last-child
+    border-bottom: 1px solid #aaa
+
+  &__id
+    font-weight: bold
+
+  &__full
+    grid-column-start: span 11
+    overflow-wrap: break-word
+
+    color: #333
+
+    &:hover
+      color: #999
+
+    &:active
+      color: #ccc
+
+  &__shortened
+    grid-column-start: span 3
+
+    display: flex
+    align-items: center
+
+    font-family: $font-stack-code
+    text-decoration: none
+    color: $color-blue-dim
+
+    &:hover
+      color: $color-blue
+
+    &:active
+      color: $color-blue-light
+
+  &__expire
+    grid-column-start: span 3
+    justify-self: end
+
+    display: flex
+    align-items: center
+
+  &__copy
+    @include simple-button($color-blue, $color-blue-gradient, $color-blue-light-gradient, $color-blue-exlight-gradient)
+
+  &__manage
+    @include simple-button($color-purple, $color-purple-gradient, $color-purple-light-gradient, $color-purple-exlight-gradient)
+
+  &__delete
+    @include simple-button($color-red, $color-red-gradient, $color-red-light-gradient, $color-red-exlight-gradient)
+
+  &--button
+    grid-column-start: span 2
+    height: 1.5rem
+    border-radius: 0.75rem
+
+  @media (max-width: $s-screen)
+    grid-template-columns: repeat(6, 1fr)
+
+    &__full
+      grid-column-start: span 5
+
+    &__shortened
+      grid-column-start: span 3
+
+    &__expire
+      grid-column-start: span 3
+
+    &--button
+      grid-column-start: span 2
+
+.icon-jump
+  height: 1rem
+  width: 1rem
+  margin-right: 0.5rem
+
+.icon-expire
+  height: 1.25rem
+  width: 1.25rem
+  margin-left: 0.25rem

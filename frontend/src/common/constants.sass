@@ -4,8 +4,9 @@ $s-screen: 640px
 $l-screen: 768px
 
 $font-stack: 'Open Sans', 'Segoe UI', sans-serif
+$font-stack-code: 'Cascadia Code', monospace
 
-%simple-input
+@mixin simple-input
   height: 2rem
   padding: 0rem 0.5rem
 
@@ -15,15 +16,15 @@ $font-stack: 'Open Sans', 'Segoe UI', sans-serif
   &:focus
     border-color: #333
 
-%simple-button
+@mixin simple-button($base-color-fallback: #333, $base-color: $color-black-gradient, $hover-color: $color-gray-gradient, $active-color: $color-light-gray-gradient)
   height: 2rem
   width: 100%
   justify-self: end
 
   border: none
   border-radius: 1rem
-  background-color: #333
-  background: $color-black
+  background-color: $base-color
+  background: $base-color
   color: #fff
 
   cursor: pointer
@@ -32,13 +33,13 @@ $font-stack: 'Open Sans', 'Segoe UI', sans-serif
   &:hover
     @media (min-width: $s-screen)
       background-color: #666
-      background: $color-gray
+      background: $hover-color
 
     &:active
       background-color: #999
-      background: $color-gray-light
+      background: $active-color
 
-%absolute
+@mixin absolute
   position: absolute
   top: 0
   bottom: 0

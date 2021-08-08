@@ -3,21 +3,21 @@ import axios from 'axios'
 
 import MessageBar from './message-bar'
 import { LoginContext } from '../app'
-import { useHidden } from '../common/custom-hooks'
+import { useHidden, useMessage } from '../common/custom-hooks'
 import './login-panel.sass'
 
 const LoginPanel = () => {
   const hidden = useHidden()
 
   const [key, setKey] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [message, setMessage] = useMessage('Please verify that you are you!')
 
   const loginState = useContext(LoginContext)
 
   const loginProcess = async (key?: string) => {
     const useKey = (typeof key == 'string')
     if (key === '') {
-      setErrorMessage('No input.')
+      setMessage({ error: 'No input.' })
       return
     }
 
@@ -30,15 +30,15 @@ const LoginPanel = () => {
 
       if ('code' in res.data) {
         if (res.data.code === 0) {
-          setErrorMessage('')
+          setMessage({ info: true })
           loginState.setLogin(true)
         } else if (key) {
-          setErrorMessage(res.data.message)
+          setMessage({ error: res.data.message })
         }
       }
     } catch (err) {
       if (useKey) {
-        setErrorMessage('Something\'s wrong with the network...')
+        setMessage({ error: 'Something\'s wrong with the network...' })
         console.log(err)
       }
     }
@@ -53,10 +53,8 @@ const LoginPanel = () => {
   useEffect(() => { loginProcess() }, [])
 
   return (
-    <div className={ `login-panel ${hidden ? 'hidden' : ''}` }>
-      <MessageBar
-        success='Please verify that you are you!'
-        error={errorMessage} />
+    <div className={`login-panel ${hidden ? 'hidden' : ''}`}>
+      <MessageBar message={message} />
       <div className='login-panel__w-btn'>
         <input
           type='text' value={key}

@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useState } from 'react'
 
 import MessageBar from './message-bar'
-import { useHidden } from '../common/custom-hooks'
+import { useHidden, useMessage } from '../common/custom-hooks'
 import './url-shortener.sass'
 
 const UrlShortener = () => {
@@ -12,12 +12,11 @@ const UrlShortener = () => {
   const [destUrl, setDestUrl] = useState('')
   const [result, setResult] = useState('')
 
-  const [successMessage, setSuccessMessage] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [message, setMessage] = useMessage('Waiting for input!')
 
   const getShortenedURL = async (): Promise<void> => {
     if (fullUrl == '') {
-      setErrorMessage('No data sent.')
+      setMessage({ error: 'No data sent.' })
       return
     }
 
@@ -32,12 +31,12 @@ const UrlShortener = () => {
 
       if ('shortened' in res.data) {
         setResult(window.location.href + res.data.shortened)
-        setSuccessMessage('Shortened succesfully!')
+        setMessage({ success: 'Shortened succesfully!'})
       } else {
-        setErrorMessage(res.data.message)
+        setMessage({ error: res.data.message })
       }
     } catch (err) {
-      setErrorMessage('Something\'s wrong with the network...')
+      setMessage({ error: 'Something\'s wrong with the network...'})
       console.log(err)
     }
   }
@@ -45,13 +44,8 @@ const UrlShortener = () => {
   const copyToClipboard = (): void => {
     if (result != '') {
       navigator.clipboard.writeText(result)
-      setSuccessMessage('Copied to clipboard!')
+      setMessage({ success: 'Copied to clipboard!' })
     }
-  }
-
-  const cleanMessage = (): void => {
-    setSuccessMessage('')
-    setErrorMessage('')
   }
 
   return (
@@ -59,13 +53,13 @@ const UrlShortener = () => {
       <input
         type='url' value={fullUrl}
         placeholder='URL to be shorten'
-        onClick={() => { cleanMessage() }}
+        onClick={() => { setMessage({ info: true }) }}
         onChange={(e) => { setFullUrl(e.target.value) }} />
       <div className='url-shortener__w-btn'>
         <input
           type='text' value={destUrl}
           placeholder='(Optional) destination URL'
-          onClick={() => { cleanMessage() }}
+          onClick={() => { setMessage({ info: true }) }}
           onChange={(e) => { setDestUrl(e.target.value) }} />
         <button onClick={() => { getShortenedURL() }}>
           Shorten
@@ -74,10 +68,7 @@ const UrlShortener = () => {
       <div className='url-shortener__divider'>
         <hr />
       </div>
-      <MessageBar
-        info='Waiting for input!'
-        success={successMessage}
-        error={errorMessage} />
+      <MessageBar message={message} />
       <div className='url-shortener__w-btn'>
         <input
           type='url' value={result} readOnly

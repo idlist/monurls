@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
-import { useHidden } from '../common/custom-hooks'
+import MessageBar from './message-bar'
+import { useHidden, useMessage } from '../common/custom-hooks'
 import './link-manager.sass'
+import IconJumpTo from '../assets/jump-to.png'
+import IconExpire from '../assets/expire.png'
 
 interface PagerItemProps {
   display: number | string
@@ -132,9 +135,84 @@ const Pager = (props: PagerProps) => {
   )
 }
 
-const testData = [
-  { id: '5', }
+interface LinkDataType {
+  id: number
+  full: string
+  shortened: string
+  expire: string
+}
+
+const TestData: LinkDataType[] = [
+  {
+    id: 1,
+    full: 'https://github.com/',
+    shortened: 'gh',
+    expire: '2021/08/08 18:00:00'
+  },
+  {
+    id: 2,
+    full: 'https://bbs.saraba1st.com/2b/forum.php',
+    shortened: 's1',
+    expire: '2021/08/08 19:00:00'
+  },
+  {
+    id: 3,
+    full: 'https://short-now-7xmbudc9q-dragon-fish.vercel.app/',
+    shortened: 'shortnow',
+    expire: '2021/08/08 20:00:00'
+  },
+  {
+    id: 4,
+    full: 'https://url.is.veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.long/',
+    shortened: 'long',
+    expire: '2021/08/08 21:00:00'
+  }
 ]
+
+interface LinkListProps {
+  list: LinkDataType[]
+}
+
+const LinkList = (props: LinkListProps) => {
+  return (
+    <ul className='link-manager__list'>
+      {props.list.map(item => (
+        <li className='link-item' key={item.id}>
+          <span className='link-item__id'>
+            {'# ' + item.id}
+          </span>
+          <a className='link-item__full'
+            href={item.full}
+            target='_blank' rel='noreferrer noopener'>
+            {item.full}
+          </a>
+          <a className='link-item__shortened'
+            href={window.location.href + item.shortened}
+            target='_blank' rel='noreferrer noopener'>
+            <img className='icon-jump'
+              src={IconJumpTo} alt='jump-to' />
+            <span>{item.shortened}</span>
+          </a>
+          <span className='link-item__expire'>
+            <span>{item.expire}</span>
+            <img className='icon-expire'
+              src={IconExpire} alt='expire' />
+          </span>
+          <button className='link-item--button link-item__copy'
+            onClick={() => {}}>
+            Copy
+          </button>
+          <button className='link-item--button link-item__manage'>
+            Manage
+          </button>
+          <button className='link-item--button link-item__delete'>
+            Delete
+          </button>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 const LinkManager = () => {
   const hidden = useHidden()
@@ -142,9 +220,14 @@ const LinkManager = () => {
   const [keyword, setKeyword] = useState('')
   const [pageLength, setPageLength] = useState(20)
   const [pageNum, setPageNum] = useState(1)
+  const [list, setList] = useState(TestData)
+
+  const [message, setMessage] = useMessage('All links are here!')
 
   return (
     <div className={`link-manager ${hidden}`.trim()}>
+      <MessageBar message={message} />
+      <div className='link-manager__space-half' />
       <div className='link-manager__search'>
         <input
           type='text' value={keyword}
@@ -154,16 +237,13 @@ const LinkManager = () => {
           Search
         </button>
       </div>
-      <div className='link-manager__space'/>
+      <div className='link-manager__space-2' />
       <Pager
         length={pageLength}
         selected={pageNum}
         onUpdate={(page) => { setPageNum(page) }} />
-      <div className='link-manager__list'>
-      {testData.map(item => (
-        <p>{item.id}</p>
-      ))}
-      </div>
+      <LinkList
+        list={list} />
       <Pager
         length={pageLength}
         selected={pageNum}
