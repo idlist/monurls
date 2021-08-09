@@ -1,0 +1,25 @@
+# These configurations would only be used by backend
+
+# Secret of cookie signature
+secret: wut
+
+# Database settings (mariadb)
+db:
+  # Database host
+  host: localhost
+
+  # Database port
+  port: 3306
+
+  # Database name
+  database: monurls
+
+  # User who can use the database above
+  user: user
+
+  # Password of the user
+  password: password
+
+# Valid keys when logging in
+key:
+  - wut

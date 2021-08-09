@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 
 import MessageBar from './message-bar'
 import { MessageAction, useHidden, useMessage } from '../common/custom-hooks'
+import config from '../config'
 import './link-manager.sass'
 
 import IconJumpTo from '../assets/jump-to.png'
@@ -255,7 +256,7 @@ const LinkManager = () => {
     try {
       if (isLoading) setMessage({ success: 'Now loading...' })
 
-      const { data } = await axios.get('https://localhost:17777/api/get-list', {
+      const { data } = await axios.get(`https://localhost:${config.port}/api/get-list`, {
         params: {
           page,
           limit: 20,
@@ -283,7 +284,7 @@ const LinkManager = () => {
 
   const deleteLink = async (id: number) => {
     try {
-      const { data } = await axios.get('https://localhost:17777/api/delete', {
+      const { data } = await axios.get(`https://localhost:${config.port}/api/delete`, {
         params: { id }
       })
 

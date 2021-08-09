@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import reactRefresh from '@vitejs/plugin-react-refresh'
+import yaml from '@rollup/plugin-yaml'
 
 export default defineConfig({
   root: 'frontend',
@@ -10,5 +11,8 @@ export default defineConfig({
   build: {
     brotliSize: false
   },
-  plugins: [reactRefresh()]
+  plugins: [
+    reactRefresh(),
+    yaml()
+  ]
 })

@@ -4,3 +4,4 @@ backend/dist/
 ssl/
 
 config.yaml
+config.backend.yaml

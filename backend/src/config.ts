@@ -2,10 +2,12 @@ import { readFileSync } from 'fs'
 
 import yaml from 'js-yaml'
 
-interface ServerConfig {
+interface AllConfig {
   port: number
-  homepage: number
   dev: boolean
+}
+
+interface BackendConfig {
   db: {
     host: string
     port: number
@@ -17,6 +19,14 @@ interface ServerConfig {
   secret: string
 }
 
-const config = yaml.load(readFileSync('./config.yaml', 'utf-8')) as ServerConfig
+type ServerConfig = AllConfig & BackendConfig
+
+const all = yaml.load(readFileSync('./config.yaml', 'utf-8')) as AllConfig
+const backend = yaml.load(readFileSync('./config.backend.yaml', 'utf-8')) as BackendConfig
+
+const config: ServerConfig = {
+  ...all,
+  ...backend
+}
 
 export default config

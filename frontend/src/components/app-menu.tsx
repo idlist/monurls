@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import axios from 'axios'
 
 import { LoginContext, AppState } from '../app'
+import config from '../config'
 import './app-menu.sass'
 
 interface AppMenuProps {
@@ -14,7 +15,7 @@ const AppMenu = (props: AppMenuProps) => {
 
   const logoutProcess = async () => {
     try {
-      const res = await axios.get(`https://localhost:17777/auth/logout`)
+      const res = await axios.get(`https://localhost:${config.port}/auth/logout`)
 
       if ('code' in res.data && res.data.code === 0) {
         loginState.setLogin(false)

@@ -42,6 +42,7 @@
     "toad-scheduler": "^1.0.0"
   },
   "devDependencies": {
+    "@rollup/plugin-yaml": "^3.0.0",
     "@types/js-yaml": "^4.0.0",
     "@types/luxon": "^1.0.0",
     "@types/node": "^16.0.0",

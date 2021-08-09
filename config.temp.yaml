@@ -1,0 +1,7 @@
+# These configurations would be used by both frontend and backend
+
+# Server port
+port: 17777
+
+# Development mode
+dev: false

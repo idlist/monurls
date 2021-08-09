@@ -4,6 +4,7 @@ import axios from 'axios'
 import MessageBar from './message-bar'
 import { LoginContext } from '../app'
 import { useHidden, useMessage } from '../common/custom-hooks'
+import config from '../config'
 import './login-panel.sass'
 
 const LoginPanel = () => {
@@ -22,7 +23,7 @@ const LoginPanel = () => {
     }
 
     try {
-      const res = await axios.get('https://localhost:17777/auth/login', {
+      const res = await axios.get(`https://localhost:${config.port}/auth/login`, {
         params: {
           key: useKey ? key : ''
         }

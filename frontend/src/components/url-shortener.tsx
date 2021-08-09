@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { DateTime, Duration } from 'luxon'
+import { DateTime } from 'luxon'
 
 import MessageBar from './message-bar'
 import { useHidden, useMessage } from '../common/custom-hooks'
+import config from '../config'
 import './url-shortener.sass'
 
 const validate = (num: string): number | undefined => {
@@ -67,7 +68,7 @@ const UrlShortener = () => {
     }
 
     try {
-      const res = await axios.get(`https://localhost:17777/api/shorten`, {
+      const res = await axios.get(`https://localhost:${config.port}/api/shorten`, {
         params: {
           full: fullUrl,
           dest: destUrl,
