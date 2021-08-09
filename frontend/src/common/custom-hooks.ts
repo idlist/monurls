@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useReducer, useEffect } from 'react'
+import { useState, useLayoutEffect, useReducer } from 'react'
 
 type DisplayState = 'hidden' | ''
 

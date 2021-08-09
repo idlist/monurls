@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, KeyboardEvent } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 
 import MessageBar from './message-bar'

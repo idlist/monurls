@@ -26,7 +26,7 @@ interface ShortenReply extends ServerState {
 
 const shorten: FastifyPluginAsync = async (server) => {
   server.get<ShortenRequest>('/api/shorten', async (request): Promise<ShortenReply> => {
-    const isVerified = verifyCookies(request)
+    const isVerified = await verifyCookies(request)
     if (!isVerified) return State.error(101)
 
     const { query } = request

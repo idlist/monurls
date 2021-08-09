@@ -56,7 +56,7 @@ const validateQuery = <T extends Record<string, string>>(query: T, property: key
 
 const manage: FastifyPluginAsync = async (server) => {
   server.get<GetListRequest>('/api/get-list', async (request): Promise<GetListReply> => {
-    const isVerified = verifyCookies(request)
+    const isVerified = await verifyCookies(request)
     if (!isVerified) return State.error(101)
 
     const { query } = request
@@ -102,7 +102,7 @@ const manage: FastifyPluginAsync = async (server) => {
   })
 
   server.get<DeleteRequest>('/api/delete', async (request): Promise<ServerState> => {
-    const isVerified = verifyCookies(request)
+    const isVerified = await verifyCookies(request)
     if (!isVerified) return State.error(101)
 
     const { query } = request
