@@ -1,10 +1,8 @@
-/*
-
-Routes:
-  /api/get-list  (including searching)
-  /api/delete
-
-*/
+/**
+ * Routes:
+ *   /api/get-list  (including searching)
+ *   /api/delete
+ */
 
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'
@@ -63,6 +61,8 @@ const manage: FastifyPluginAsync = async (server) => {
 
     const { query } = request
 
+    console.log(query)
+
     let page = validateQuery(query, 'page', 1) - 1
     if (page <= 0) page = 0
     let limit = validateQuery(query, 'limit', 20)
@@ -76,8 +76,10 @@ const manage: FastifyPluginAsync = async (server) => {
       : await pool.query('SELECT COUNT(*) as count FROM urls')
     const count = countQueue[0].count
 
+    if (!count) return State.error(106)
+
     const length = Math.ceil(count / limit)
-    if (page > length) page = length
+    if (page >= length) page = length
 
     const listQuery: RawLinkData[] = query.keyword
       ? await pool.query(`

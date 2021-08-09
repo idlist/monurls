@@ -270,13 +270,14 @@ const LinkManager = () => {
         setList(data.list)
 
         if (isLoading) setIsLoading(false)
+        if (isSearching) setMessage({ success: 'Search completed!' })
         if (options.updateMessage) setMessage({ info: true })
       } else {
         setMessage({ error: data.message })
       }
     } catch (err) {
       console.error(err)
-      setMessage({ error: 'Something\'s wrong with network...' })
+      setMessage({ error: 'Something\'s wrong with the network...' })
     }
   }
 
@@ -295,16 +296,21 @@ const LinkManager = () => {
       updateLinkList(pageNum)
     } catch (err) {
       console.error(err)
-      setMessage({ error: 'Something\'s wrong with network...' })
+      setMessage({ error: 'Something\'s wrong with the network...' })
     }
   }
 
   const searchKeyword = () => {
-    if (keyword) setIsSearching(true)
+    if (keyword) {
+      setIsSearching(true)
+      if (isSearching) updateLinkList(pageNum)
+    }
     else setIsSearching(false)
   }
 
-  useEffect(() => { updateLinkList(pageNum, { updateMessage: true }) }, [pageNum, isSearching])
+  useEffect(() => {
+    updateLinkList(pageNum, { updateMessage: true })
+  }, [pageNum, isSearching])
 
   return (
     <div className={`link-manager ${hidden}`.trim()}>

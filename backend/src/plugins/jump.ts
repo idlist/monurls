@@ -1,10 +1,7 @@
-/*
-
-Routes:
-  /:shortenedId  (Site redirection)
-    - If a redirection does not succeed, then jump to the homepage (/)
-
-*/
+/**
+ * Routes:
+ *   /:shortenedId  (Site redirection)
+ */
 
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'

@@ -1,9 +1,7 @@
-/*
-
-Routes:
-  /  (SPA homepage)
-
-*/
+/**
+ * Routes:
+ *   /  (SPA homepage)
+ */
 
 import { resolve } from 'path'
 

@@ -1,9 +1,7 @@
-/*
-
-Routes:
-  /api/shorten
-
-*/
+/**
+ * Routes:
+ *   /api/shorten
+ */
 
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'
