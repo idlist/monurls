@@ -4,6 +4,7 @@ import yaml from 'js-yaml'
 
 interface ServerConfig {
   port: number
+  homepage: number
   dev: boolean
   db: {
     host: string

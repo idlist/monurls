@@ -5,6 +5,7 @@
 
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'
+import { DateTime } from 'luxon'
 
 import Database, { pool } from '../database'
 import randomString from '../utils/random-string'
@@ -15,6 +16,7 @@ interface ShortenRequest extends RequestGI {
   Querystring: {
     full: string
     dest: string
+    expire: string
   }
 }
 
@@ -43,11 +45,20 @@ const shorten: FastifyPluginAsync = async (server) => {
       } while (await Database.exists('urls', 'shortened', shortened))
     }
 
-    let expire: string | undefined // TODO: add function of setting expiring date
+    let expire: number | undefined
+    let expireDate: DateTime | undefined
 
-    if (typeof expire == 'string') {
+    if (query.expire) {
+      expire = parseInt(query.expire)
+      if (isNaN(expire)) return State.error(105)
+
+      expireDate = DateTime.fromMillis(expire)
+      if (expireDate < DateTime.local()) return State.error(105)
+    }
+
+    if (typeof expire == 'number') {
       await pool.query('INSERT INTO urls (full, shortened, expire) VALUES (?, ?, ?)',
-        [query.full, shortened, expire])
+        [query.full, shortened, expireDate?.toSQL({ includeOffset: false })])
     } else {
       await pool.query(`INSERT INTO urls (full, shortened) VALUES (?, ?)`,
         [query.full, shortened])

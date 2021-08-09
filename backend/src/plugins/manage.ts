@@ -61,8 +61,6 @@ const manage: FastifyPluginAsync = async (server) => {
 
     const { query } = request
 
-    console.log(query)
-
     let page = validateQuery(query, 'page', 1) - 1
     if (page <= 0) page = 0
     let limit = validateQuery(query, 'limit', 20)
