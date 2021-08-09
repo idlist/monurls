@@ -1,3 +1,10 @@
+/*
+
+Routes:
+  /api/shorten
+
+*/
+
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'
 
@@ -30,6 +37,7 @@ const shorten: FastifyPluginAsync = async (server) => {
     if ('dest' in query && query.dest) {
       const existed = await Database.exists('urls', 'shortened', query.dest)
       if (existed) return State.error(103)
+      if (!/[0-9a-zA-Z-]/.test(query.dest)) return State.error(105)
       shortened = query.dest
     } else {
       do {
@@ -37,7 +45,7 @@ const shorten: FastifyPluginAsync = async (server) => {
       } while (await Database.exists('urls', 'shortened', shortened))
     }
 
-    let expire: string | undefined
+    let expire: string | undefined // TODO: add function of setting expiring date
 
     if (typeof expire == 'string') {
       await pool.query('INSERT INTO urls (full, shortened, expire) VALUES (?, ?, ?)',

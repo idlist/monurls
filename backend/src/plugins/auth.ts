@@ -1,3 +1,9 @@
+/**
+ * Routes:
+ *   /auth/login
+ *   /auth/logout
+ */
+
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'
@@ -32,7 +38,7 @@ const auth: FastifyPluginAsync = async (server) => {
     if ('key' in query && config.key.includes(query.key)) {
       const token = randomString(64)
       const expire = DateTime.local().plus({ days: 90 })
-      const timestamp = expire.toFormat('yyyy-MM-dd hh:mm:ss')
+      const timestamp = expire.toSQL({ includeOffset: false })
 
       pool.query('INSERT INTO tokens (token, expire) VALUES (?, ?)',
         [token, timestamp])

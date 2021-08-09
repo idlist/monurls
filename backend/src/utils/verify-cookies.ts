@@ -15,7 +15,7 @@ const verifyCookies = async (request: FastifyRequest): Promise<boolean> => {
   }
 
   const res = await pool.query('SELECT * FROM tokens WHERE token = ? AND expire > ?',
-    [decodedCookies.value, DateTime.local().toFormat('yyyy-MM-dd hh:mm:ss')] )
+    [decodedCookies.value, DateTime.local().toSQL({ includeOffset: false })] )
 
   if (!res.length) {
     return false

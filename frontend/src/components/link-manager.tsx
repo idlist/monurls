@@ -262,7 +262,6 @@ const LinkManager = () => {
           keyword: isSearching ? keyword : ''
         }
       })
-      console.log(data)
 
       if (!data.code) {
         setPageNum(data.page)
@@ -343,8 +342,7 @@ const LinkManager = () => {
                 selected={pageNum}
                 onUpdate={(page) => { setPageNum(page) }} />
             </>
-          )
-          : (
+          ) : (
             <div className='link-manager__text'>
               There are no shortened links!
             </div>

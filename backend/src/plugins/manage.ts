@@ -1,3 +1,11 @@
+/*
+
+Routes:
+  /api/get-list  (including searching)
+  /api/delete
+
+*/
+
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'

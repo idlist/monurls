@@ -1,3 +1,10 @@
+/*
+
+Routes:
+  /  (SPA homepage)
+
+*/
+
 import { resolve } from 'path'
 
 import { FastifyPluginAsync } from 'fastify'

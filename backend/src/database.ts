@@ -35,8 +35,8 @@ initDatabase()
 
 class Database {
   static async exists(table: string, column: string, value: string): Promise<boolean> {
-    const res = await pool.query('SELECT COUNT(*) AS count FROM ? WHERE ? = ?',
-      [table, column, value])
+    const res = await pool.query(`SELECT COUNT(*) AS count FROM ${pool.escapeId(table)} WHERE ${pool.escapeId(column)} = ?`,
+      [value])
     return res[0].count ? true : false
   }
 }

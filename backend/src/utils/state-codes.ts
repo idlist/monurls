@@ -8,7 +8,7 @@ const StateCodes: StateType = {
   102: 'No data sent.',
   103: 'The destination URL is duplicated.',
   104: 'The record is not found',
-  105: 'Parameter is invalid.',
+  105: 'Some input is not valid.',
   404: 'Not found.',
   418: 'I\'m a teapot.',
   429: 'Too many requests.'

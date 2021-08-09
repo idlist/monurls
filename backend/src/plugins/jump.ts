@@ -1,5 +1,14 @@
+/*
+
+Routes:
+  /:shortenedId  (Site redirection)
+    - If a redirection does not succeed, then jump to the homepage (/)
+
+*/
+
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
 import fp from 'fastify-plugin'
+import { DateTime } from 'luxon'
 
 import { pool } from '../database'
 
@@ -16,7 +25,8 @@ const jump: FastifyPluginAsync = async (server) => {
     }
   }, async (request, reply) => {
     const { params } = request
-    const res = await pool.query('SELECT full FROM urls WHERE shortened = ?', params.shortenedId)
+    const res = await pool.query('SELECT full FROM urls WHERE shortened = ? AND expire > ?',
+      [params.shortenedId, DateTime.local().toSQL({ includeOffset: false })])
     if (!res.length) {
       reply.redirect(303, '/')
     } else {
