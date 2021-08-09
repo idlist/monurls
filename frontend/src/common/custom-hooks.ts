@@ -35,12 +35,14 @@ const messageReducer = (state: MessageState, action: MessageAction): MessageStat
     }
   } else if ('success' in action) {
     return {
-      ...state,
-      success: action.success ?? state.success
+      info: state.info,
+      success: action.success ?? state.success,
+      error: ''
     }
   } else if ('error' in action) {
     return {
-      ...state,
+      info: state.info,
+      success: '',
       error: action.error ?? state.error
     }
   } else return state

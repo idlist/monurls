@@ -15,6 +15,7 @@
   "main": "backend/dist/index.js",
   "scripts": {
     "dev": "vite",
+    "bundle": "vite build",
     "build": "vite build && node backend/scripts/build",
     "compile": "node backend/scripts/build",
     "start": "node backend/scripts/build && node backend/dist/index",

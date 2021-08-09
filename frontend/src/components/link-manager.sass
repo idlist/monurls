@@ -42,6 +42,10 @@ $canvas-size: 3rem
     padding: 0
     margin: 1rem 0
 
+  &__text
+    margin: 4rem 0
+    text-align: center
+
 .pager-item
   display: grid
   justify-items: center
@@ -97,28 +101,56 @@ $canvas-size: 3rem
 
 .link-item
   display: grid
-  grid-template-columns: repeat(12, 1fr)
-  grid-auto-rows: minmax(max-content, 1.5rem)
-  column-gap: 0.5rem
   row-gap: 0.5rem
   align-items: center
 
-  padding: 0.5rem
+  padding: 0.5rem 0
   border-top: 1px solid #aaa
 
   &:last-child
     border-bottom: 1px solid #aaa
 
+  &__row-1
+    display: flex
+    align-items: center
+    column-gap: 0.5rem
+
+    min-width: 0
+    min-height: 1.5rem
+
+  &__row-2
+    display: grid
+    grid-template-columns: repeat(6, 1fr)
+    column-gap: 0.5rem
+    row-gap: 0.5rem
+
+    min-height: 1.5rem
+
+    @media (max-width: $s-screen)
+      grid-template-columns: repeat(3, 1fr)
+
   &__id
     display: flex
     align-items: center
 
+    min-width: 4rem
+    font-size: 0.875rem
+    color: #fff
+    background-color: #333
+    border-radius: 0.25rem
+
+    padding: 0 0.25rem
     -webkit-user-select: none
-    font-weight: bold
+
+    &__icon
+      margin-right: 0.25rem
+
+    &__content
+      font-weight: bold
 
   &__full
-    grid-column-start: span 10
     overflow-wrap: break-word
+    min-width: 0
 
     color: #333
 
@@ -128,15 +160,19 @@ $canvas-size: 3rem
     &:active
       color: #ccc
 
-  &__shortened
+  &__info
     grid-column-start: span 3
 
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+  &__shortened
     display: flex
     align-items: center
 
     font-family: $font-stack-code
     text-decoration: none
-    letter-spacing: -1px
     color: $color-blue-dim
 
     &:hover
@@ -146,9 +182,6 @@ $canvas-size: 3rem
       color: $color-blue-light
 
   &__expire
-    grid-column-start: span 3
-    justify-self: end
-
     display: flex
     align-items: center
 
@@ -162,24 +195,9 @@ $canvas-size: 3rem
     @include simple-button($color-red, $color-red-gradient, $color-red-light-gradient, $color-red-exlight-gradient)
 
   &--button
-    grid-column-start: span 2
     height: 1.5rem
     border-radius: 0.75rem
 
-  @media (max-width: $s-screen)
-    grid-template-columns: repeat(6, 1fr)
-
-    &__full
-      grid-column-start: span 5
-
-    &__shortened
-      grid-column-start: span 3
-
-    &__expire
-      grid-column-start: span 3
-
-    &--button
-      grid-column-start: span 2
 
 .icon-jump-to
   height: 1rem
@@ -190,9 +208,3 @@ $canvas-size: 3rem
   height: 1.25rem
   width: 1.25rem
   margin-left: 0.25rem
-
-.icon-sharp
-  height: 1.25rem
-  width: 1.25rem
-  margin-left: -0.125rem
-  margin-right: 0.125rem

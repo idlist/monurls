@@ -2,6 +2,12 @@ import { createPool } from 'mariadb'
 
 import config from './config'
 
+interface OkPacket {
+  affectedRows: number
+  insertId: number
+  warningStatus: number
+}
+
 const pool = createPool({
   host: config.db.host,
   port: config.db.port,
@@ -17,12 +23,12 @@ const initDatabase = async () => {
       id        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
       full      TEXT NOT NULL,
       shortened VARCHAR(255) UNIQUE NOT NULL,
-      expire    TIMESTAMP NULL,
+      expire    DATETIME NULL,
       PRIMARY KEY (id))`)
   await pool.query(`
     CREATE TABLE IF NOT EXISTS tokens (
       token     VARCHAR(255) UNIQUE NOT NULL,
-      expire    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      expire    DATETIME DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (token))`)
 }
 initDatabase()
@@ -37,3 +43,4 @@ class Database {
 
 export default Database
 export { pool }
+export type { OkPacket }

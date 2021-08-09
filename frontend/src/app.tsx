@@ -48,7 +48,7 @@ const App = () => {
 }
 
 const AppContainer = () => {
-  const [login, setLogin] = useState(false)
+  const [login, setLogin] = useState(true /* TEST */)
 
   const loginState = {
     login: login,

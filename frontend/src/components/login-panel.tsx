@@ -44,12 +44,6 @@ const LoginPanel = () => {
     }
   }
 
-  const checkEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key == 'Enter') {
-      loginProcess(key)
-    }
-  }
-
   useEffect(() => { loginProcess() }, [])
 
   return (
@@ -60,7 +54,9 @@ const LoginPanel = () => {
           type='text' value={key}
           placeholder='Key'
           onChange={(e) => { setKey(e.target.value) }}
-          onKeyUp={(e) => { checkEnter(e) }} />
+          onKeyUp={(e) => {
+            if (e.key == 'Enter') loginProcess(key)
+          }} />
         <button onClick={() => { loginProcess(key) }}>
           Log In
         </button>
