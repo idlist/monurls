@@ -26,7 +26,8 @@ const LoginPanel = () => {
       const res = await axios.get(`https://localhost:${config.port}/auth/login`, {
         params: {
           key: useKey ? key : ''
-        }
+        },
+        withCredentials: true
       })
 
       if ('code' in res.data) {
@@ -40,7 +41,7 @@ const LoginPanel = () => {
     } catch (err) {
       if (useKey) {
         setMessage({ error: 'Something\'s wrong with the network...' })
-        console.log(err)
+        console.error(err)
       }
     }
   }

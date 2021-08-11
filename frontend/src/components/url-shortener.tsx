@@ -54,7 +54,6 @@ const UrlShortener = () => {
     }
 
     const expire = CalcExpireDate()
-    console.log(expire)
 
     if (expire instanceof DateTime) {
       if (!expire.isValid) {
@@ -74,7 +73,8 @@ const UrlShortener = () => {
           dest: destUrl,
           expire: expire instanceof DateTime ? expire.toMillis() : '',
           key: localStorage.getItem('key')
-        }
+        },
+        withCredentials: true
       })
 
       if ('shortened' in res.data) {
@@ -85,7 +85,7 @@ const UrlShortener = () => {
       }
     } catch (err) {
       setMessage({ error: 'Something\'s wrong with the network...' })
-      console.log(err)
+      console.error(err)
     }
   }
 

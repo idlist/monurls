@@ -30,8 +30,12 @@ const server = fastify(config.dev ? HttpsOption : {})
 
 if (config.dev) {
   server.register(fastifyCors, {
-    origin: 'http://localhost:16666',
+    origin: [
+      'http://localhost:16666',
+      'https://localhost:16666'
+    ],
     methods: 'GET',
+    credentials: true
   })
 }
 
@@ -55,8 +59,7 @@ server.setNotFoundHandler({
     server.rateLimit({ max: 5 })
   }
 }, (_, reply) => {
-  reply.code(418)
-  return State.error(418)
+  return State.error(404)
 })
 
 const main = async () => {

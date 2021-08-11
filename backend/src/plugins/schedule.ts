@@ -22,7 +22,7 @@ const cleanLinks = new SimpleIntervalJob(Daily, new AsyncTask(
       DateTime.local().toSQL({ includeOffset: false }))
   },
   (err) => {
-    console.log(err)
+    console.error(err)
   }
 ))
 

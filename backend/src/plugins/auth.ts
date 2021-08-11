@@ -42,11 +42,14 @@ const auth: FastifyPluginAsync = async (server) => {
 
       pool.query('INSERT INTO tokens (token, expire) VALUES (?, ?)',
         [token, timestamp])
+
       reply.setCookie('token', token, {
         httpOnly: true,
         signed: true,
-        expires: new Date(expire.toMillis())
+        expires: new Date(expire.toMillis()),
+        path: '/'
       })
+
       return State.success()
     }
 

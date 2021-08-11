@@ -261,7 +261,8 @@ const LinkManager = () => {
           page,
           limit: 20,
           keyword: isSearching ? keyword : ''
-        }
+        },
+        withCredentials: true
       })
 
       if (!data.code) {
@@ -285,7 +286,8 @@ const LinkManager = () => {
   const deleteLink = async (id: number) => {
     try {
       const { data } = await axios.get(`https://localhost:${config.port}/api/delete`, {
-        params: { id }
+        params: { id },
+        withCredentials: true
       })
 
       if (!data.code) {

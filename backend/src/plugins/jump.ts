@@ -8,6 +8,7 @@ import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'
 
 import { pool } from '../database'
+import State from '../utils/state-codes'
 
 interface JumpRequest extends RequestGI {
   Params: {
@@ -22,10 +23,13 @@ const jump: FastifyPluginAsync = async (server) => {
     }
   }, async (request, reply) => {
     const { params } = request
+
     const res = await pool.query('SELECT full FROM urls WHERE shortened = ? AND expire > ?',
       [params.shortenedId, DateTime.local().toSQL({ includeOffset: false })])
+
     if (!res.length) {
-      reply.redirect(303, '/')
+      reply.code(418)
+      return State.error(418)
     } else {
       reply.redirect(303, res[0].full)
     }

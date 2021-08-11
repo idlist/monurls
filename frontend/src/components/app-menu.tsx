@@ -15,13 +15,15 @@ const AppMenu = (props: AppMenuProps) => {
 
   const logoutProcess = async () => {
     try {
-      const res = await axios.get(`https://localhost:${config.port}/auth/logout`)
+      const res = await axios.get(`https://localhost:${config.port}/auth/logout`, {
+        withCredentials: true
+      })
 
       if ('code' in res.data && res.data.code === 0) {
         loginState.setLogin(false)
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
