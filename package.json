@@ -1,6 +1,6 @@
 {
   "name": "monurls",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "My own Node.js URL shortener.",
   "author": "i'DLisT",
   "license": "MIT",

@@ -84,7 +84,7 @@ const manage: FastifyPluginAsync = async (server) => {
       : await pool.query('SELECT COUNT(*) as count FROM urls')
     const count = countQueue[0].count
 
-    if (!count) return State.error(106)
+    if (!count && query.keyword) return State.error(106)
 
     const length = Math.ceil(count / limit)
 
