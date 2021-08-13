@@ -31,18 +31,19 @@ interface LogoutRequest extends RequestGI {
 
 const auth: FastifyPluginAsync = async (server) => {
   server.get<LoginRequest>('/auth/login', async (request, reply): Promise<ServerState> => {
-    if (await verifyCookies(request)) return State.success()
+    const isVerified = await verifyCookies(request)
+    if (isVerified) return State.success()
 
     const { query } = request
 
     if ('key' in query && config.key.includes(query.key)) {
       const token = randomString(64)
       const expire = DateTime.local().plus({ days: 90 })
-      const timestamp = expire.toSQL({ includeOffset: false })
 
-      pool.query('INSERT INTO tokens (token, expire) VALUES (?, ?)',
-        [token, timestamp])
+      await pool.query('INSERT INTO tokens (token, expire) VALUES (?, ?)',
+        [token, expire.toSQL({ includeOffset: false })])
 
+      reply.clearCookie('token')
       reply.setCookie('token', token, {
         httpOnly: true,
         signed: true,

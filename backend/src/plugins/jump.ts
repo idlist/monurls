@@ -24,8 +24,10 @@ const jump: FastifyPluginAsync = async (server) => {
   }, async (request, reply) => {
     const { params } = request
 
-    const res = await pool.query('SELECT full FROM urls WHERE shortened = ? AND expire > ?',
-      [params.shortenedId, DateTime.local().toSQL({ includeOffset: false })])
+    const res = await pool.query(`
+      SELECT full FROM urls
+      WHERE shortened = ? AND (expire > ? OR expire IS NULL)
+      `, [params.shortenedId, DateTime.local().toSQL({ includeOffset: false })])
 
     if (!res.length) {
       reply.code(418)

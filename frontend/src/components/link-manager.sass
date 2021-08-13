@@ -129,6 +129,13 @@ $canvas-size: 3rem
     @media (max-width: $s-screen)
       grid-template-columns: repeat(3, 1fr)
 
+  &__row-3
+    display: grid
+    row-gap: 0.5rem
+
+    border-top: 1px dashed #999
+    padding-top: 0.5rem
+
   &__id
     display: flex
     align-items: center
@@ -198,6 +205,27 @@ $canvas-size: 3rem
   &--button
     height: 1.5rem
     border-radius: 0.75rem
+
+  &__update
+    display: grid
+    grid-template-columns: repeat(4, 1fr)
+    column-gap: 0.5rem
+
+    @media (max-width: $s-screen)
+      grid-template-columns: 1fr
+      row-gap: 0.5rem
+
+    &__dest
+      @include simple-input
+
+      @media (min-width: $s-screen)
+        grid-column-start: span 3
+
+    &__button
+      @include simple-button
+
+      @media (max-width: $s-screen)
+        width: 50%
 
 .icon-jump-to
   height: 1rem

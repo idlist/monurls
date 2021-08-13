@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import axios from 'axios'
 import { DateTime } from 'luxon'
 
 import MessageBar from './message-bar'
+import InputDate from './input-date'
 import { MessageAction, useHidden, useMessage } from '../common/custom-hooks'
 import config from '../config'
 import './link-manager.sass'
@@ -79,10 +80,10 @@ const PagerHalfLimit = PagerLimit % 2 ? (PagerLimit - 1) / 2 : PagerLimit / 2
 
 const Pager = (props: PagerProps) => {
   const [starting, setStarting] = useState(1)
-  const [pageList, setPageList] = useState<number[]>([])
   const [viewing, setViewing] = useState(false)
+  const [pageList, setPageList] = useState<number[]>([])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!viewing) {
       if (props.selected <= PagerHalfLimit) {
         setStarting(1)
@@ -94,7 +95,7 @@ const Pager = (props: PagerProps) => {
     }
   }, [props.length, props.selected])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setViewing(false)
 
     let newList: number[] = []
@@ -170,10 +171,16 @@ const TestData: LinkData[] = [
 interface LinkListProps {
   list: LinkData[]
   onMessage(action: MessageAction): void
+  onUpdate(id: number, expire: DateTime | null, dest: string): void
   onDelete(id: number): void
 }
 
 const LinkList = (props: LinkListProps) => {
+  const [showManager, setShowManager] = useState(0)
+
+  const [expire, setExpire] = useState<DateTime | null>(null)
+  const [dest, setDest] = useState('')
+
   const copyToClipboard = (shortened: string) => {
     navigator.clipboard.writeText(window.location.href + shortened)
     props.onMessage({ success: 'Copied to clipboard!' })
@@ -219,15 +226,31 @@ const LinkList = (props: LinkListProps) => {
               Copy
             </button>
             <button className='link-item--button link-item__manage'
-              onClick={() => { props.onMessage({ error: '"Manage" is still under working...' }) /* TODO */ }}>
+              onClick={() => { setShowManager(showManager == item.id ? 0 : item.id) }}>
               Manage
             </button>
             <button className='link-item--button link-item__delete'
               onClick={() => { props.onDelete(item.id) }}>
               Delete
             </button>
-            {/* TODO: Simple manager */}
           </div>
+          {showManager == item.id
+            && (
+              <div className='link-item__row-3'>
+                <InputDate
+                  onUpdateDate={(date) => { setExpire(date) }} />
+                <div className='link-item__update'>
+                  <input className='link-item__update__dest'
+                    type='text' value={dest}
+                    placeholder='Destination URL'
+                    onChange={(e) => { setDest(e.target.value) }}/>
+                  <button className='link-item__update__button'
+                    onClick={() => { props.onUpdate(item.id, expire, dest) }}>
+                    Update
+                  </button>
+                </div>
+              </div>
+            )}
         </li>
       ))}
     </ul>
@@ -235,15 +258,15 @@ const LinkList = (props: LinkListProps) => {
 }
 
 interface UpdateLinkOptions {
-  updateMessage?: boolean
+  resetMessage?: boolean
 }
 
 const LinkManager = () => {
   const hidden = useHidden()
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSearching, setIsSearching] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const [pageNum, setPageNum] = useState(1)
+  const [searchFrame, setSearchFrame] = useState('')
   const [keyword, setKeyword] = useState('')
 
   const [linkCount, setLinkCount] = useState(0)
@@ -254,13 +277,13 @@ const LinkManager = () => {
 
   const updateLinkList = async (page: number, options: UpdateLinkOptions = {}) => {
     try {
-      if (isLoading) setMessage({ success: 'Now loading...' })
+      if (loading) setMessage({ success: 'Now loading...' })
 
       const { data } = await axios.get(`https://localhost:${config.port}/api/get-list`, {
         params: {
           page,
           limit: 20,
-          keyword: isSearching ? keyword : ''
+          keyword: keyword
         },
         withCredentials: true
       })
@@ -271,9 +294,9 @@ const LinkManager = () => {
         setPageLength(data.length)
         setList(data.list)
 
-        if (isLoading) setIsLoading(false)
-        if (isSearching) setMessage({ success: 'Search completed!' })
-        if (options.updateMessage) setMessage({ info: true })
+        if (loading) setLoading(false)
+        if (keyword) setMessage({ success: 'Search completed!' })
+        if (options.resetMessage) setMessage({ info: true })
       } else {
         setMessage({ error: data.message })
       }
@@ -303,17 +326,15 @@ const LinkManager = () => {
     }
   }
 
-  const searchKeyword = () => {
-    if (keyword) {
-      setIsSearching(true)
-      if (isSearching) updateLinkList(pageNum)
-    }
-    else setIsSearching(false)
+  const updateLink = async (id: number, expire: DateTime | null, dest: string) => {
+    /* TODO */
   }
 
+  const searchKeyword = () => { setKeyword(searchFrame) }
+
   useEffect(() => {
-    updateLinkList(pageNum, { updateMessage: true })
-  }, [pageNum, isSearching])
+    updateLinkList(pageNum, { resetMessage: keyword ? false : true })
+  }, [pageNum, keyword])
 
   return (
     <div className={`link-manager ${hidden}`.trim()}>
@@ -321,9 +342,9 @@ const LinkManager = () => {
       <div className='link-manager__space-half' />
       <div className='link-manager__search'>
         <input
-          type='text' value={keyword}
+          type='text' value={searchFrame}
           onClick={() => { setMessage({ info: true }) }}
-          onChange={(e) => { setKeyword(e.target.value) }}
+          onChange={(e) => { setSearchFrame(e.target.value) }}
           onKeyUp={(e) => {
             if (e.key == 'Enter') searchKeyword()
           }}
@@ -334,7 +355,7 @@ const LinkManager = () => {
         </button>
       </div>
       <div className='link-manager__space-2' />
-      <div className={isLoading ? 'hidden' : ''}>
+      <div className={loading ? 'hidden' : ''}>
         {linkCount
           ? (
             <>
@@ -345,6 +366,7 @@ const LinkManager = () => {
               <LinkList
                 list={list}
                 onMessage={(action) => { setMessage(action) }}
+                onUpdate={(id, expire, dest) => { updateLink(id, expire, dest) }}
                 onDelete={(id) => { deleteLink(id) }} />
               <Pager
                 length={pageLength}

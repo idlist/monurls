@@ -6,7 +6,7 @@ const StateCodes: StateType = {
   100: 'Unknown issue.',
   101: 'Not authorized.',
   102: 'No data sent.',
-  103: 'The destination URL is duplicated.',
+  103: 'The destination URL exists.',
   104: 'The record is not found',
   105: 'Some input is not valid.',
   106: 'No record is found.',

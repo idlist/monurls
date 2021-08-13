@@ -10,6 +10,7 @@ const verifyCookies = async (request: FastifyRequest): Promise<boolean> => {
   }
 
   const decodedCookies = unsignCookie(cookies.token)
+
   if (!decodedCookies.valid) {
     return false
   }
