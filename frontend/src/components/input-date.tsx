@@ -3,14 +3,15 @@ import { DateTime } from 'luxon'
 
 import './input-date.sass'
 
+interface InputDateProps {
+  onClearMessage(): void
+  onUpdateDate(date: DateTime | null): void
+}
+
 const validate = (num: string): number | undefined => {
   const value = parseInt(num)
   if (isNaN(value)) return undefined
   return value
-}
-
-interface InputDateProps {
-  onUpdateDate(date: DateTime | null): void
 }
 
 const InputDate = (props: InputDateProps) => {
@@ -21,7 +22,10 @@ const InputDate = (props: InputDateProps) => {
   const [day, setDay] = useState('')
 
   useEffect(() => {
-    if (!year && !month && !day) props.onUpdateDate(null)
+    if (!year && !month && !day) {
+      props.onUpdateDate(null)
+      return
+    }
 
     const current = DateTime.local()
     let date: DateTime
@@ -30,18 +34,21 @@ const InputDate = (props: InputDateProps) => {
       date = DateTime.fromObject({
         year: validate(year) ?? current.year,
         month: validate(month) ?? current.month,
-        day: validate(day) ?? current.day
+        day: validate(day) ?? current.day,
+        hour: 23,
+        minute: 59,
+        second: 59
       })
     } else {
       date = DateTime.local().plus({
         year: validate(year),
         month: validate(month),
-        day: validate(day)
+        day: validate(day),
       })
     }
 
     props.onUpdateDate(date)
-  }, [year, month, day])
+  }, [year, month, day, isEndDate])
 
   const toggleMode = () => {
     setIsEndDate(!isEndDate)
@@ -55,14 +62,17 @@ const InputDate = (props: InputDateProps) => {
           <input
             type='text'
             placeholder='Year'
+            onClick={() => { props.onClearMessage() }}
             onChange={(e) => { setYear(e.target.value) }} />
           <input
             type='text'
             placeholder='Month'
+            onClick={() => { props.onClearMessage() }}
             onChange={(e) => { setMonth(e.target.value) }} />
           <input
             type='text'
             placeholder='Day'
+            onClick={() => { props.onClearMessage() }}
             onChange={(e) => { setDay(e.target.value) }} />
         </>
       ) : (
@@ -71,14 +81,17 @@ const InputDate = (props: InputDateProps) => {
           <input
             type='text'
             placeholder='Year(s)'
+            onClick={() => { props.onClearMessage() }}
             onChange={(e) => { setYear(e.target.value) }} />
           <input
             type='text'
             placeholder='Month(s)'
+            onClick={() => { props.onClearMessage() }}
             onChange={(e) => { setMonth(e.target.value) }} />
           <input
             type='text'
             placeholder='Day(s)'
+            onClick={() => { props.onClearMessage() }}
             onChange={(e) => { setDay(e.target.value) }} />
         </>
       )}

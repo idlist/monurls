@@ -172,6 +172,7 @@ interface LinkListProps {
   list: LinkData[]
   onMessage(action: MessageAction): void
   onUpdate(id: number, expire: DateTime | null, dest: string): void
+  onClearExpire(id: number): void
   onDelete(id: number): void
 }
 
@@ -213,7 +214,7 @@ const LinkList = (props: LinkListProps) => {
               <span className='link-item__expire'>
                 <span>
                   {item.expire
-                    ? DateTime.fromMillis(item.expire).toFormat('yyyy/MM/dd hh:mm:ss')
+                    ? DateTime.fromMillis(item.expire).toFormat('yyyy/MM/dd HH:mm:ss')
                     : 'No expire date'
                   }
                 </span>
@@ -238,15 +239,21 @@ const LinkList = (props: LinkListProps) => {
             && (
               <div className='link-item__row-3'>
                 <InputDate
+                  onClearMessage={() => { props.onMessage({ info: true }) }}
                   onUpdateDate={(date) => { setExpire(date) }} />
                 <div className='link-item__update'>
                   <input className='link-item__update__dest'
                     type='text' value={dest}
                     placeholder='Destination URL'
-                    onChange={(e) => { setDest(e.target.value) }}/>
-                  <button className='link-item__update__button'
+                    onClick={() => { props.onMessage({ info: true }) }}
+                    onChange={(e) => { setDest(e.target.value) }} />
+                  <button className='link-item__update__update'
                     onClick={() => { props.onUpdate(item.id, expire, dest) }}>
                     Update
+                  </button>
+                  <button className='link-item__update__clean'
+                    onClick={() => { props.onClearExpire(item.id) }}>
+                    Clean Expire Date
                   </button>
                 </div>
               </div>
@@ -264,6 +271,7 @@ interface UpdateLinkOptions {
 const LinkManager = () => {
   const hidden = useHidden()
   const [loading, setLoading] = useState(true)
+  const [changedByServer, setChangedByServer] = useState(false)
 
   const [pageNum, setPageNum] = useState(1)
   const [searchFrame, setSearchFrame] = useState('')
@@ -278,6 +286,10 @@ const LinkManager = () => {
   const updateLinkList = async (page: number, options: UpdateLinkOptions = {}) => {
     try {
       if (loading) setMessage({ success: 'Now loading...' })
+      if (changedByServer) {
+        setChangedByServer(false)
+        return
+      }
 
       const { data } = await axios.get(`https://localhost:${config.port}/api/get-list`, {
         params: {
@@ -289,6 +301,8 @@ const LinkManager = () => {
       })
 
       if (!data.code) {
+        if (data.page != pageNum) setChangedByServer(true)
+
         setPageNum(data.page)
         setLinkCount(data.count)
         setPageLength(data.length)
@@ -300,6 +314,69 @@ const LinkManager = () => {
       } else {
         setMessage({ error: data.message })
       }
+    } catch (err) {
+      console.error(err)
+      setMessage({ error: 'Something\'s wrong with the network...' })
+    }
+  }
+
+  const updateLink = async (id: number, expire: DateTime | null, dest: string) => {
+    if (!expire && !dest) {
+      setMessage({ error: 'The link is not updated.' })
+      return
+    }
+
+    if (expire instanceof DateTime) {
+      if (!expire.isValid) {
+        setMessage({ error: 'The expiring date is not valid.' })
+        return
+      }
+      if (expire < DateTime.local()) {
+        setMessage({ error: 'The expiring date is before today.' })
+        return
+      }
+    }
+
+    try {
+      const { data } = await axios.get(`https://localhost:${config.port}/api/update`, {
+        params: {
+          id,
+          dest,
+          expire: expire instanceof DateTime ? expire.toMillis() : ''
+        },
+        withCredentials: true
+      })
+
+      if (!data.code) {
+        setMessage({ success: 'Link updated!' })
+      } else {
+        setMessage({ error: data.message })
+      }
+
+      updateLinkList(pageNum)
+    } catch (err) {
+      console.error(err)
+      setMessage({ error: 'Something\'s wrong with the network...' })
+    }
+  }
+
+  const cleanLinkExpire = async (id: number) => {
+    try {
+      const { data } = await axios.get(`https://localhost:${config.port}/api/update`, {
+        params: {
+          id,
+          expire: 0
+        },
+        withCredentials: true
+      })
+
+      if (!data.code) {
+        setMessage({ success: 'Link updated!' })
+      } else {
+        setMessage({ error: data.message })
+      }
+
+      updateLinkList(pageNum)
     } catch (err) {
       console.error(err)
       setMessage({ error: 'Something\'s wrong with the network...' })
@@ -326,12 +403,6 @@ const LinkManager = () => {
     }
   }
 
-  const updateLink = async (id: number, expire: DateTime | null, dest: string) => {
-    /* TODO */
-  }
-
-  const searchKeyword = () => { setKeyword(searchFrame) }
-
   useEffect(() => {
     updateLinkList(pageNum, { resetMessage: keyword ? false : true })
   }, [pageNum, keyword])
@@ -346,11 +417,11 @@ const LinkManager = () => {
           onClick={() => { setMessage({ info: true }) }}
           onChange={(e) => { setSearchFrame(e.target.value) }}
           onKeyUp={(e) => {
-            if (e.key == 'Enter') searchKeyword()
+            if (e.key == 'Enter') setKeyword(searchFrame)
           }}
           placeholder='Full URL, shortened URL or ID...' />
         <button
-          onClick={() => { searchKeyword() }}>
+          onClick={() => { setKeyword(searchFrame) }}>
           Search
         </button>
       </div>
@@ -367,6 +438,7 @@ const LinkManager = () => {
                 list={list}
                 onMessage={(action) => { setMessage(action) }}
                 onUpdate={(id, expire, dest) => { updateLink(id, expire, dest) }}
+                onClearExpire={(id) => { cleanLinkExpire(id) }}
                 onDelete={(id) => { deleteLink(id) }} />
               <Pager
                 length={pageLength}

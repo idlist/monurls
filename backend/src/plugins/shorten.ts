@@ -34,7 +34,7 @@ const shorten: FastifyPluginAsync = async (server) => {
     if (!('full' in query) || query.full == '') return State.error(102)
 
     let shortened = ''
-    if ('dest' in query && query.dest) {
+    if (query.dest) {
       const existed = await Database.exists('urls', 'shortened', query.dest)
       if (existed) return State.error(103)
       if (!/[0-9a-zA-Z-]/.test(query.dest)) return State.error(105)
@@ -45,20 +45,20 @@ const shorten: FastifyPluginAsync = async (server) => {
       } while (await Database.exists('urls', 'shortened', shortened))
     }
 
-    let expire: number | undefined
-    let expireDate: DateTime | undefined
+    let expireTs: number | undefined
+    let expire: DateTime | null = null
 
     if (query.expire) {
-      expire = parseInt(query.expire)
-      if (isNaN(expire)) return State.error(105)
+      expireTs = parseInt(query.expire)
+      if (isNaN(expireTs)) return State.error(105)
 
-      expireDate = DateTime.fromMillis(expire)
-      if (expireDate < DateTime.local()) return State.error(105)
+      expire = DateTime.fromMillis(expireTs)
+      if (expire < DateTime.local()) return State.error(105)
     }
 
-    if (typeof expire == 'number') {
+    if (typeof expireTs == 'number') {
       await pool.query('INSERT INTO urls (full, shortened, expire) VALUES (?, ?, ?)',
-        [query.full, shortened, expireDate?.toSQL({ includeOffset: false })])
+        [query.full, shortened, expire?.toSQL({ includeOffset: false })])
     } else {
       await pool.query(`INSERT INTO urls (full, shortened) VALUES (?, ?)`,
         [query.full, shortened])

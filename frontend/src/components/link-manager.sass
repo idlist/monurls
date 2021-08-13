@@ -212,20 +212,22 @@ $canvas-size: 3rem
     column-gap: 0.5rem
 
     @media (max-width: $s-screen)
-      grid-template-columns: 1fr
+      grid-template-columns: repeat(2, 1fr)
       row-gap: 0.5rem
 
     &__dest
       @include simple-input
 
-      @media (min-width: $s-screen)
-        grid-column-start: span 3
+      grid-column-start: span 2
 
-    &__button
+    &__update
+      @include simple-button
+
+    &__clean
       @include simple-button
 
       @media (max-width: $s-screen)
-        width: 50%
+        grid-row-start: 2
 
 .icon-jump-to
   height: 1rem

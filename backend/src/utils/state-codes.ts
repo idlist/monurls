@@ -10,6 +10,7 @@ const StateCodes: StateType = {
   104: 'The record is not found',
   105: 'Some input is not valid.',
   106: 'No record is found.',
+  107: 'The link is not updated.',
   404: 'Not found.',
   418: 'I\'m a teapot.',
   429: 'Too many requests.'

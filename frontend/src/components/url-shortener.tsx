@@ -40,8 +40,7 @@ const UrlShortener = () => {
         params: {
           full: fullUrl,
           dest: destUrl,
-          expire: expire instanceof DateTime ? expire.toMillis() : '',
-          key: localStorage.getItem('key')
+          expire: expire instanceof DateTime ? expire.toMillis() : ''
         },
         withCredentials: true
       })
@@ -73,6 +72,7 @@ const UrlShortener = () => {
         onClick={() => { setMessage({ info: true }) }}
         onChange={(e) => { setFullUrl(e.target.value) }} />
       <InputDate
+        onClearMessage={() => { setMessage({ info: true }) }}
         onUpdateDate={(date) => { setExpire(date) }} />
       <div className='url-shortener__with-button'>
         <input className='url-shortener__input'
