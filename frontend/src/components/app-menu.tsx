@@ -15,7 +15,7 @@ const AppMenu = (props: AppMenuProps) => {
 
   const logoutProcess = async () => {
     try {
-      const res = await axios.get(`https://localhost:${config.port}/auth/logout`, {
+      const res = await axios.get(`${config.url}/auth/logout`, {
         withCredentials: true
       })
 

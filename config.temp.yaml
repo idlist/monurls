@@ -3,6 +3,9 @@
 # Server port
 port: 17777
 
+# The domain of the service
+cname: your.domain
+
 # Development mode
 dev: false
 

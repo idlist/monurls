@@ -36,7 +36,7 @@ const UrlShortener = () => {
     }
 
     try {
-      const res = await axios.get(`https://localhost:${config.port}/api/shorten`, {
+      const res = await axios.get(`${config.url}/api/shorten`, {
         params: {
           full: fullUrl,
           dest: destUrl,

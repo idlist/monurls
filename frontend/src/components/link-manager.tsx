@@ -291,7 +291,7 @@ const LinkManager = () => {
         return
       }
 
-      const { data } = await axios.get(`https://localhost:${config.port}/api/get-list`, {
+      const { data } = await axios.get(`${config.url}/api/get-list`, {
         params: {
           page,
           limit: 20,
@@ -338,7 +338,7 @@ const LinkManager = () => {
     }
 
     try {
-      const { data } = await axios.get(`https://localhost:${config.port}/api/update`, {
+      const { data } = await axios.get(`${config.url}/api/update`, {
         params: {
           id,
           dest,
@@ -362,7 +362,7 @@ const LinkManager = () => {
 
   const cleanExpire = async (id: number) => {
     try {
-      const { data } = await axios.get(`https://localhost:${config.port}/api/update`, {
+      const { data } = await axios.get(`${config.url}/api/update`, {
         params: {
           id,
           expire: 0
@@ -385,7 +385,7 @@ const LinkManager = () => {
 
   const deleteLink = async (id: number) => {
     try {
-      const { data } = await axios.get(`https://localhost:${config.port}/api/delete`, {
+      const { data } = await axios.get(`${config.url}/api/delete`, {
         params: { id },
         withCredentials: true
       })

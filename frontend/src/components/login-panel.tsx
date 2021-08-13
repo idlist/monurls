@@ -23,7 +23,7 @@ const LoginPanel = () => {
     }
 
     try {
-      const res = await axios.get(`https://localhost:${config.port}/auth/login`, {
+      const res = await axios.get(`${config.url}/auth/login`, {
         params: {
           key: useKey ? key : ''
         },
