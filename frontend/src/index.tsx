@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import AppContainer from './app'
+import config from './config'
 import './index.sass'
 
 ReactDOM.render(
@@ -10,3 +11,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 )
+
+document.title = config.title

@@ -281,7 +281,7 @@ const LinkManager = () => {
   const [pageLength, setPageLength] = useState(1)
   const [list, setList] = useState<LinkData[]>([])
 
-  const [message, setMessage] = useMessage('All links are here!')
+  const [message, setMessage] = useMessage('')
 
   const updateLinkList = async (page: number, options: UpdateLinkOptions = {}) => {
     try {
@@ -309,8 +309,8 @@ const LinkManager = () => {
         setList(data.list)
 
         if (loading) setLoading(false)
-        if (keyword) setMessage({ success: 'Search completed!' })
-        if (options.resetMessage) setMessage({ info: true })
+        if (keyword) setMessage({ success: `${data.count} link(s) found!` })
+        if (options.resetMessage) setMessage({ info: `There are ${data.count} links in total!` })
       } else {
         setMessage({ error: data.message })
       }
@@ -360,7 +360,7 @@ const LinkManager = () => {
     }
   }
 
-  const cleanLinkExpire = async (id: number) => {
+  const cleanExpire = async (id: number) => {
     try {
       const { data } = await axios.get(`https://localhost:${config.port}/api/update`, {
         params: {
@@ -438,7 +438,7 @@ const LinkManager = () => {
                 list={list}
                 onMessage={(action) => { setMessage(action) }}
                 onUpdate={(id, expire, dest) => { updateLink(id, expire, dest) }}
-                onClearExpire={(id) => { cleanLinkExpire(id) }}
+                onClearExpire={(id) => { cleanExpire(id) }}
                 onDelete={(id) => { deleteLink(id) }} />
               <Pager
                 length={pageLength}

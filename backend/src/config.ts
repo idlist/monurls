@@ -5,6 +5,7 @@ import yaml from 'js-yaml'
 interface AllConfig {
   port: number
   dev: boolean
+  devport: boolean
 }
 
 interface BackendConfig {

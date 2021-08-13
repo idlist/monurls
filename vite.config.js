@@ -1,13 +1,16 @@
 import { readFileSync } from 'fs'
 
 import { defineConfig } from 'vite'
+import yaml from 'js-yaml'
 import reactRefresh from '@vitejs/plugin-react-refresh'
-import yaml from '@rollup/plugin-yaml'
+import pluginYaml from '@rollup/plugin-yaml'
+
+const config = yaml.load(readFileSync('config.yaml', 'utf-8'))
 
 export default defineConfig({
   root: 'frontend',
   server: {
-    port: 16666,
+    port: config.devport,
     host: '0.0.0.0',
     https: {
       key: readFileSync('./ssl/localhost.key'),
@@ -19,6 +22,6 @@ export default defineConfig({
   },
   plugins: [
     reactRefresh(),
-    yaml()
+    pluginYaml()
   ]
 })

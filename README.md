@@ -1,4 +1,9 @@
-# monurls
+<div align="center">
+  <img width="120" src="./frontend/src/assets/monurls_icon.png" alt="logo" />
+
+  # monurls
+
+</div>
 
 My own Node.js URL shortener.
 

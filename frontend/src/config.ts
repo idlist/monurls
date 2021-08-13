@@ -3,11 +3,9 @@ import all from '../../config.yaml'
 interface PageConfig {
   port: number
   dev: boolean
+  title: string
 }
 
-const config: PageConfig = {
-  port: all.port,
-  dev: all.dev
-}
+const config = all as PageConfig
 
 export default config
