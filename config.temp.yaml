@@ -5,3 +5,9 @@ port: 17777
 
 # Development mode
 dev: false
+
+# Port for frontend in development mode
+devport: 16666
+
+# Title for frontend homepage
+title: monurls

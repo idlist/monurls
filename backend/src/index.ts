@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { Server } from 'https'
 
-import fastify, { FastifyHttpsOptions } from 'fastify'
+import fastify, { FastifyHttpsOptions, FastifyServerOptions } from 'fastify'
 import fastifyCors from 'fastify-cors'
 import fastifyCookie from 'fastify-cookie'
 import fastifyRateLimit from 'fastify-rate-limit'
@@ -19,14 +19,18 @@ import jump from './plugins/jump'
 import manage from './plugins/manage'
 import tasks from './plugins/schedule'
 
-const HttpsOption: FastifyHttpsOptions<Server> = {
-  https: {
-    key: readFileSync('./ssl/localhost.key'),
-    cert: readFileSync('./ssl/localhost.crt')
+let serverOption: FastifyHttpsOptions<Server> | FastifyServerOptions = {}
+
+if (config.dev) {
+  serverOption = {
+    https: {
+      key: readFileSync('./ssl/localhost.key'),
+      cert: readFileSync('./ssl/localhost.crt')
+    }
   }
 }
 
-const server = fastify(config.dev ? HttpsOption : {})
+const server = fastify(serverOption)
 
 if (config.dev) {
   server.register(fastifyCors, {
