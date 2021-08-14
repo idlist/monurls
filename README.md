@@ -28,7 +28,7 @@ git clone https://github.com/idlist/monurls
 npm install
 ```
 
-2. 在 MariaDB 中创建数据库，并将仓库中的 `config.temp.yaml` 和 `config.backend.temp.yaml` 中的配置项进行相应的调整。
+2. 在 MariaDB 中创建数据库，并将仓库中的 `config.temp.yaml` 和 `config.backend.temp.yaml` 中的配置项进行相应的调整并分别更名为 `config.yaml` 和 `config.backend.yaml`。
 
 3. 继续进行以下操作：
 

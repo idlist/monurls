@@ -92,9 +92,9 @@ const manage: FastifyPluginAsync = async (server) => {
       ? await pool.query(`
           SELECT * FROM urls
           WHERE id = ? OR full LIKE ? OR shortened LIKE ?
-          ORDER BY id LIMIT ? OFFSET ?
+          ORDER BY id DESC LIMIT ? OFFSET ?
         `, [keywordNumber, `http%${query.keyword}%`, `%${query.keyword}`, limit, page * limit])
-      : await pool.query('SELECT * FROM urls ORDER BY id LIMIT ? OFFSET ?',
+      : await pool.query('SELECT * FROM urls ORDER BY id DESC LIMIT ? OFFSET ?',
         [limit, page * limit])
     let list: LinkData[] = []
 
