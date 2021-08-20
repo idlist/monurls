@@ -1,7 +1,7 @@
 <div align="center">
   <img width="80" src="./frontend/src/assets/monurls_icon.png" alt="logo" />
 
-  # monurls
+  <h1>monurls</h1>
 
 </div>
 
@@ -15,26 +15,39 @@
 
 ## Functions
 
+<details>
+<summary>功能展示</summary>
+<br>
+
 - 认证，虽然不怎么安全但聊胜于无，毕竟初衷就是只有自己能新增和管理短链接。
 
-![Login](./doc/login.png)
+<div align="center">
+  <img width="600" src="./doc/login.png" alt="login" />
+</div>
 
 - 缩短链接，可以指定短链接和过期时间。
 
-![Shortener](./doc/shortener.png)
+<div align="center">
+  <img width="600" src="./doc/shortener.png" alt="shortener" />
+</div>
 
 - 短链接管理，可以搜索、删除、重新指定短链接和修改过期时间。
 
-![Manager](./doc/manager.png)
+<div align="center">
+  <img width="600" src="./doc/manager.png" alt="manager" />
+</div>
 
 其他的啥功能都没做，摸了。
 
-## Install
+</details>
+
+## Build from source
 
 1. 安装 Node.js 并进行以下操作：
 
 ```shell
 git clone https://github.com/idlist/monurls
+cd monurls
 npm install
 ```
 
