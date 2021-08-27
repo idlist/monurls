@@ -41,7 +41,7 @@
 
 </details>
 
-## Build from source
+## Building from source
 
 1. 安装 Node.js 并进行以下操作：
 

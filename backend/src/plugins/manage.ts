@@ -135,7 +135,7 @@ const manage: FastifyPluginAsync = async (server) => {
     let res: OkPacket
     if (query.dest && expireTs) {
       res = await pool.query('UPDATE urls SET shortened = ?, expire = ? WHERE id = ?',
-        [query.dest, expireTs ? expire?.toSQL({ includeOffset: false }) : null, index])
+        [query.dest, expire?.toSQL({ includeOffset: false }), index])
     } else if (query.dest && !expireTs) {
       res = await pool.query('UPDATE urls SET shortened = ? WHERE id = ?',
         [query.dest, index])
