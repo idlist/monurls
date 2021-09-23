@@ -10,10 +10,7 @@ import { AsyncTask, SimpleIntervalJob, SimpleIntervalSchedule } from 'toad-sched
 
 import { pool } from '../database'
 
-const Daily: SimpleIntervalSchedule = {
-  days: 1,
-  runImmediately: true
-}
+const Daily: SimpleIntervalSchedule = { days: 1 }
 
 const cleanLinks = new SimpleIntervalJob(Daily, new AsyncTask(
   'clean links',

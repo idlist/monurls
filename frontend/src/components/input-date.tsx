@@ -14,7 +14,7 @@ const validate = (num: string): number | undefined => {
   return value
 }
 
-const InputDate = (props: InputDateProps) => {
+const InputDate: React.FunctionComponent<InputDateProps> = props => {
   const [isEndDate, setIsEndDate] = useState(false)
 
   const [year, setYear] = useState('')
@@ -43,7 +43,7 @@ const InputDate = (props: InputDateProps) => {
       date = DateTime.local().plus({
         year: validate(year),
         month: validate(month),
-        day: validate(day),
+        day: validate(day)
       })
     }
 

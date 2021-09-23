@@ -10,7 +10,7 @@ interface AppMenuProps {
   onSwitchApp(newApp: AppState): void
 }
 
-const AppMenu = (props: AppMenuProps) => {
+const AppMenu: React.FunctionComponent<AppMenuProps> = props => {
   const loginState = useContext(LoginContext)
 
   const logoutProcess = async () => {

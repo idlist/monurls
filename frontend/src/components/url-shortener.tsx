@@ -8,7 +8,7 @@ import { useHidden, useMessage } from '../common/custom-hooks'
 import config from '../config'
 import './url-shortener.sass'
 
-const UrlShortener = () => {
+const UrlShortener: React.FunctionComponent = () => {
   const hidden = useHidden()
 
   const [fullUrl, setFullUrl] = useState('')

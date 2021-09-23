@@ -60,7 +60,7 @@ const shorten: FastifyPluginAsync = async (server) => {
       await pool.query('INSERT INTO urls (full, shortened, expire) VALUES (?, ?, ?)',
         [query.full, shortened, expire?.toSQL({ includeOffset: false })])
     } else {
-      await pool.query(`INSERT INTO urls (full, shortened) VALUES (?, ?)`,
+      await pool.query('INSERT INTO urls (full, shortened) VALUES (?, ?)',
         [query.full, shortened])
     }
 

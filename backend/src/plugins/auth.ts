@@ -35,8 +35,9 @@ const auth: FastifyPluginAsync = async (server) => {
     if (isVerified) return State.success()
 
     const { query } = request
+    const validKeys = config.key.map(key => key.toString())
 
-    if ('key' in query && config.key.includes(query.key)) {
+    if (query.key && validKeys.includes(query.key)) {
       const token = randomString(64)
       const expire = DateTime.local().plus({ days: 90 })
 
@@ -63,7 +64,7 @@ const auth: FastifyPluginAsync = async (server) => {
     if ('token' in cookies) {
       const decodedToken = unsignCookie(cookies.token)
       if (decodedToken.valid) {
-        await pool.query(`DELETE FROM tokens WHERE token = ?`, decodedToken.value)
+        await pool.query('DELETE FROM tokens WHERE token = ?', decodedToken.value)
       }
     }
 

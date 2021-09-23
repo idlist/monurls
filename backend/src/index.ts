@@ -35,7 +35,6 @@ const server = fastify(serverOption)
 if (config.dev) {
   server.register(fastifyCors, {
     origin: [
-      `http://localhost:${config.devport}`,
       `https://localhost:${config.devport}`
     ],
     methods: 'GET',

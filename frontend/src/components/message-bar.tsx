@@ -10,7 +10,7 @@ interface MessageProps {
   }
 }
 
-const MessageBar = ({ message }: MessageProps) => {
+const MessageBar: React.FunctionComponent<MessageProps> = ({ message }) => {
   const [state, setState] = useState<keyof MessageProps['message']>('info')
   const [barClass, setBarClass] = useState('')
   const [barMessage, setBarMessage] = useState('')

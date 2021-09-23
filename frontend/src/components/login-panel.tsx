@@ -7,7 +7,7 @@ import { useHidden, useMessage } from '../common/custom-hooks'
 import config from '../config'
 import './login-panel.sass'
 
-const LoginPanel = () => {
+const LoginPanel: React.FunctionComponent = () => {
   const hidden = useHidden()
 
   const [key, setKey] = useState('')

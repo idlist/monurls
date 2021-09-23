@@ -1,8 +1,8 @@
-import { useState, useLayoutEffect, useReducer } from 'react'
+import React, { useState, useLayoutEffect, useReducer } from 'react'
 
 type DisplayState = 'hidden' | ''
 
-const useHidden = () => {
+const useHidden = (): DisplayState => {
   const [hidden, setHidden] = useState<DisplayState>('hidden')
 
   useLayoutEffect(() => { setHidden('') }, [])
@@ -48,7 +48,7 @@ const messageReducer = (state: MessageState, action: MessageAction): MessageStat
   } else return state
 }
 
-const useMessage = (message: string) => {
+const useMessage = (message: string): readonly [MessageState, React.Dispatch<MessageAction>] => {
   const [state, dispatch] = useReducer(messageReducer, {
     info: message,
     success: '',

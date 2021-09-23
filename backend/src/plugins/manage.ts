@@ -61,7 +61,7 @@ const validateInteger = <T extends Record<string, string>>(query: T, property: k
   return validated
 }
 
-let lastKeyword: string = ''
+let lastKeyword = ''
 
 const manage: FastifyPluginAsync = async (server) => {
   server.get<GetListRequest>('/api/get-list', async (request): Promise<GetListReply> => {
@@ -72,7 +72,7 @@ const manage: FastifyPluginAsync = async (server) => {
     let page = validateInteger(query, 'page', 1) - 1
     if (page <= 0 || lastKeyword != query.keyword) page = 0
 
-    let limit = validateInteger(query, 'limit', 20)
+    const limit = validateInteger(query, 'limit', 20)
     const keywordNumber = validateInteger(query, 'keyword', 0)
     lastKeyword = query.keyword ?? ''
 
@@ -96,7 +96,7 @@ const manage: FastifyPluginAsync = async (server) => {
         `, [keywordNumber, `http%${query.keyword}%`, `%${query.keyword}`, limit, page * limit])
       : await pool.query('SELECT * FROM urls ORDER BY id DESC LIMIT ? OFFSET ?',
         [limit, page * limit])
-    let list: LinkData[] = []
+    const list: LinkData[] = []
 
     for (const { id, full, shortened, expire } of listQuery) {
       list.push({

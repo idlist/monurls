@@ -19,7 +19,7 @@ interface PagerItemProps {
 
 const PagerCenter = '1.5rem'
 
-const PagerItem = (props: PagerItemProps) => {
+const PagerItem: React.FunctionComponent<PagerItemProps> = props => {
   return (
     <div className={'pager-item__container'}
       onClick={() => props.onClick()}>
@@ -98,7 +98,7 @@ const Pager = (props: PagerProps) => {
   useLayoutEffect(() => {
     setViewing(false)
 
-    let newList: number[] = []
+    const newList: number[] = []
 
     let length = PagerLimit
     if (length > props.length) length = props.length
@@ -147,6 +147,7 @@ interface LinkData {
   expire: number
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TestData: LinkData[] = [
   {
     id: 1,
@@ -176,7 +177,7 @@ interface LinkListProps {
   onDelete(id: number): void
 }
 
-const LinkList = (props: LinkListProps) => {
+const LinkList: React.FunctionComponent<LinkListProps> = props => {
   const [showManager, setShowManager] = useState(0)
 
   const [expire, setExpire] = useState<DateTime | null>(null)
@@ -268,7 +269,7 @@ interface UpdateLinkOptions {
   resetMessage?: boolean
 }
 
-const LinkManager = () => {
+const LinkManager: React.FunctionComponent = () => {
   const hidden = useHidden()
   const [loading, setLoading] = useState(true)
   const [changedByServer, setChangedByServer] = useState(false)
