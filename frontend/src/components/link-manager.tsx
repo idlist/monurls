@@ -311,7 +311,11 @@ const LinkManager: React.FunctionComponent = () => {
 
         if (loading) setLoading(false)
         if (keyword) setMessage({ success: `${data.count} link(s) found!` })
-        if (options.resetMessage) setMessage({ info: `There are ${data.count} links in total!` })
+        if (options.resetMessage) {
+          if (!data.count) setMessage({ info: 'It\'s time to create the first link!'})
+          else if (data.count == 1) setMessage({ info: 'There is 1 link in total!' })
+          else setMessage({ info: `There are ${data.count} links in total!` })
+        }
       } else {
         setMessage({ error: data.message })
       }
@@ -339,12 +343,11 @@ const LinkManager: React.FunctionComponent = () => {
     }
 
     try {
-      const { data } = await axios.get(`${config.url}/api/update`, {
-        params: {
-          id,
-          dest,
-          expire: expire instanceof DateTime ? expire.toMillis() : ''
-        },
+      const { data } = await axios.put(`${config.url}/api/update`, {
+        id,
+        dest,
+        expire: expire instanceof DateTime ? expire.toMillis() : ''
+      }, {
         withCredentials: true
       })
 
@@ -363,11 +366,10 @@ const LinkManager: React.FunctionComponent = () => {
 
   const cleanExpire = async (id: number) => {
     try {
-      const { data } = await axios.get(`${config.url}/api/update`, {
-        params: {
-          id,
-          expire: 0
-        },
+      const { data } = await axios.put(`${config.url}/api/update`, {
+        id,
+        expire: 0
+      }, {
         withCredentials: true
       })
 
@@ -386,7 +388,7 @@ const LinkManager: React.FunctionComponent = () => {
 
   const deleteLink = async (id: number) => {
     try {
-      const { data } = await axios.get(`${config.url}/api/delete`, {
+      const { data } = await axios.delete(`${config.url}/api/delete`, {
         params: { id },
         withCredentials: true
       })

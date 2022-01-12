@@ -1,6 +1,6 @@
 /**
  * Routes:
- *   /  (SPA homepage)
+ *   /  (SPA homepage) (Static Site)
  */
 
 import { resolve } from 'path'

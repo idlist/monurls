@@ -36,12 +36,11 @@ const UrlShortener: React.FunctionComponent = () => {
     }
 
     try {
-      const res = await axios.get(`${config.url}/api/shorten`, {
-        params: {
-          full: fullUrl,
-          dest: destUrl,
-          expire: expire instanceof DateTime ? expire.toMillis() : ''
-        },
+      const res = await axios.post(`${config.url}/api/shorten`, {
+        full: fullUrl,
+        dest: destUrl,
+        expire: expire instanceof DateTime ? expire.toMillis() : ''
+      }, {
         withCredentials: true
       })
 

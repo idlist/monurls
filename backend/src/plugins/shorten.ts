@@ -1,6 +1,6 @@
 /**
  * Routes:
- *   /api/shorten
+ *   /api/shorten (POST)
  */
 
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
@@ -13,7 +13,7 @@ import State, { ServerState } from '../utils/state-codes'
 import verifyCookies from '../utils/verify-cookies'
 
 interface ShortenRequest extends RequestGI {
-  Querystring: {
+  Body: {
     full: string
     dest: string
     expire: string
@@ -25,20 +25,20 @@ interface ShortenReply extends ServerState {
 }
 
 const shorten: FastifyPluginAsync = async (server) => {
-  server.get<ShortenRequest>('/api/shorten', async (request): Promise<ShortenReply> => {
+  server.post<ShortenRequest>('/api/shorten', async (request): Promise<ShortenReply> => {
     const isVerified = await verifyCookies(request)
     if (!isVerified) return State.error(101)
 
-    const { query } = request
+    const { body } = request
 
-    if (!('full' in query) || query.full == '') return State.error(102)
+    if (!('full' in body) || body.full == '') return State.error(102)
 
     let shortened = ''
-    if (query.dest) {
-      const existed = await Database.exists('urls', 'shortened', query.dest)
+    if (body.dest) {
+      const existed = await Database.exists('urls', 'shortened', body.dest)
       if (existed) return State.error(103)
-      if (!/[0-9a-zA-Z-]/.test(query.dest)) return State.error(105)
-      shortened = query.dest
+      if (!/[0-9a-zA-Z-]/.test(body.dest)) return State.error(105)
+      shortened = body.dest
     } else {
       do {
         shortened = randomString(6)
@@ -48,8 +48,8 @@ const shorten: FastifyPluginAsync = async (server) => {
     let expireTs: number | undefined
     let expire: DateTime | null = null
 
-    if (query.expire) {
-      expireTs = parseInt(query.expire)
+    if (body.expire) {
+      expireTs = parseInt(body.expire)
       if (isNaN(expireTs)) return State.error(105)
 
       expire = DateTime.fromMillis(expireTs)
@@ -58,10 +58,10 @@ const shorten: FastifyPluginAsync = async (server) => {
 
     if (typeof expireTs == 'number') {
       await pool.query('INSERT INTO urls (full, shortened, expire) VALUES (?, ?, ?)',
-        [query.full, shortened, expire?.toSQL({ includeOffset: false })])
+        [body.full, shortened, expire?.toSQL({ includeOffset: false })])
     } else {
       await pool.query('INSERT INTO urls (full, shortened) VALUES (?, ?)',
-        [query.full, shortened])
+        [body.full, shortened])
     }
 
     return State.success({ shortened: shortened })

@@ -24,8 +24,8 @@
     "count": "cd .. && cloc monurls --exclude-dir=node_modules,dist --include-ext=ts,tsx,sass"
   },
   "dependencies": {
-    "axios": "^0.21.0",
-    "fastify": "^3.21.5",
+    "axios": "^0.24.0",
+    "fastify": "^3.0.0",
     "fastify-cookie": "^5.0.0",
     "fastify-cors": "^6.0.0",
     "fastify-plugin": "^3.0.0",

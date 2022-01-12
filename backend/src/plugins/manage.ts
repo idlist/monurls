@@ -1,8 +1,8 @@
 /**
  * Routes:
- *   /api/get-list  (including searching)
- *   /api/update
- *   /api/delete
+ *   /api/get-list  (including searching) (GET)
+ *   /api/update (PUT)
+ *   /api/delete (DELETE)
  */
 
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'
@@ -13,12 +13,12 @@ import Database, { pool, OkPacket } from '../database'
 import State, { ServerState } from '../utils/state-codes'
 import verifyCookies from '../utils/verify-cookies'
 
-type GetListQuery = {
-  [property in 'page' | 'limit' | 'keyword']?: string
-}
-
 interface GetListRequest extends RequestGI {
-  Querystring: GetListQuery
+  Querystring: {
+    page?: string,
+    limit?: string,
+    keyword?: string
+  }
 }
 
 interface RawLinkData {
@@ -36,20 +36,18 @@ interface GetListReply extends ServerState {
   list?: LinkData[]
 }
 
-type UpdateQuery = {
-  [property in 'id' | 'expire' | 'dest']?: string
-}
-
 interface UpdateRequest extends RequestGI {
-  Querystring: UpdateQuery
-}
-
-type DeleteQuery = {
-  [property in 'id']?: string
+  Body: {
+    id?: string,
+    expire?: string,
+    dest?: string
+  }
 }
 
 interface DeleteRequest extends RequestGI {
-  Querystring: DeleteQuery
+  Querystring: {
+    id?: string
+  }
 }
 
 const validateInteger = <T extends Record<string, string>>(query: T, property: keyof T, fallback: number): number => {
@@ -110,22 +108,22 @@ const manage: FastifyPluginAsync = async (server) => {
     return State.success({ count, length, page: page + 1, list })
   })
 
-  server.get<UpdateRequest>('/api/update', async (request): Promise<ServerState> => {
+  server.put<UpdateRequest>('/api/update', async (request): Promise<ServerState> => {
     if (!await verifyCookies(request)) return State.error(101)
 
-    const { query } = request
+    const { body } = request
 
-    const index = validateInteger(query, 'id', 0)
+    const index = validateInteger(body, 'id', 0)
     if (index < 1) return State.error(105)
 
-    if (query.dest) {
+    if (body.dest) {
       const existed = await Database.exists('urls', 'shortened', '')
       if (existed) return State.error(103)
     }
 
     let expire: DateTime | null = null, expireTs = 0
-    if (query.expire) {
-      expireTs = validateInteger(query, 'expire', 0)
+    if (body.expire) {
+      expireTs = validateInteger(body, 'expire', 0)
       if (expireTs) {
         expire = DateTime.fromMillis(expireTs)
         if (expire < DateTime.local()) return State.error(105)
@@ -133,12 +131,12 @@ const manage: FastifyPluginAsync = async (server) => {
     }
 
     let res: OkPacket
-    if (query.dest && expireTs) {
+    if (body.dest && expireTs) {
       res = await pool.query('UPDATE urls SET shortened = ?, expire = ? WHERE id = ?',
-        [query.dest, expire?.toSQL({ includeOffset: false }), index])
-    } else if (query.dest && !expireTs) {
+        [body.dest, expire?.toSQL({ includeOffset: false }), index])
+    } else if (body.dest && !expireTs) {
       res = await pool.query('UPDATE urls SET shortened = ? WHERE id = ?',
-        [query.dest, index])
+        [body.dest, index])
     } else {
       res = await pool.query('UPDATE urls SET expire = ? WHERE id = ?',
         [expireTs ? expire?.toSQL({ includeOffset: false }) : null, index])
@@ -148,7 +146,7 @@ const manage: FastifyPluginAsync = async (server) => {
     else return State.error(104)
   })
 
-  server.get<DeleteRequest>('/api/delete', async (request): Promise<ServerState> => {
+  server.delete<DeleteRequest>('/api/delete', async (request): Promise<ServerState> => {
     if (!await verifyCookies(request)) return State.error(101)
 
     const { query } = request

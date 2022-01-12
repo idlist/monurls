@@ -1,7 +1,7 @@
 /**
  * Routes:
- *   /auth/login
- *   /auth/logout
+ *   /auth/login (GET)
+ *   /auth/logout (GET)
  */
 
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'

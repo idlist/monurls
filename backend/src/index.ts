@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { Server } from 'https'
 
-import fastify, { FastifyHttpsOptions, FastifyServerOptions } from 'fastify'
+import fastify, { FastifyHttpsOptions } from 'fastify'
 import fastifyCors from 'fastify-cors'
 import fastifyCookie from 'fastify-cookie'
 import fastifyRateLimit from 'fastify-rate-limit'
@@ -19,7 +19,7 @@ import jump from './plugins/jump'
 import manage from './plugins/manage'
 import tasks from './plugins/schedule'
 
-let serverOption: FastifyHttpsOptions<Server> | FastifyServerOptions = {}
+let serverOption: Partial<FastifyHttpsOptions<Server>> = {}
 
 if (config.dev) {
   serverOption = {
@@ -30,7 +30,10 @@ if (config.dev) {
   }
 }
 
-const server = fastify(serverOption)
+const server = fastify({
+  logger: true,
+  ...serverOption
+})
 
 if (config.dev) {
   server.register(fastifyCors, {
