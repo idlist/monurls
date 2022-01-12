@@ -31,7 +31,9 @@ if (config.dev) {
 }
 
 const server = fastify({
-  logger: true,
+  logger: {
+    level: config.logger
+  },
   ...serverOption
 })
 

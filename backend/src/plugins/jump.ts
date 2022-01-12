@@ -1,6 +1,6 @@
 /**
  * Routes:
- *   /:shortenedId  (Site redirection)
+ *   /:shortenedId  (Site redirection) (GET)
  */
 
 import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastify'

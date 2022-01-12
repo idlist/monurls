@@ -18,6 +18,7 @@ interface BackendConfig {
   }
   key: string[]
   secret: string
+  logger: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal' | 'silent'
 }
 
 type ServerConfig = AllConfig & BackendConfig

@@ -3,6 +3,11 @@
 # Secret of cookie signature
 secret: wut
 
+# Fastify logging level, see below
+# https://www.fastify.io/docs/latest/Reference/Logging/
+# https://github.com/pinojs/pino/blob/master/docs/api.md#logger-level
+logger: 'info'
+
 # Database settings (mariadb)
 db:
   # Database host

@@ -38,7 +38,7 @@ const shorten: FastifyPluginAsync = async (server) => {
       const existed = await Database.exists('urls', 'shortened', body.dest)
       if (existed) return State.error(103)
       if (!/[0-9a-zA-Z-]/.test(body.dest)) return State.error(105)
-      shortened = body.dest
+      shortened = body.dest.replace(/ /g, '-')
     } else {
       do {
         shortened = randomString(6)
