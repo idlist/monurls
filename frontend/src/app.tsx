@@ -21,7 +21,7 @@ interface LoginContextType {
 
 const LoginContext = createContext<LoginContextType>({
   login: false,
-  setLogin: () => { return }
+  setLogin: () => { return },
 })
 
 type AppState = 'shortener' | 'manager'
@@ -52,7 +52,7 @@ const AppContainer: React.FunctionComponent = () => {
 
   const loginState = {
     login: login,
-    setLogin: (state: boolean) => { setLogin(state) }
+    setLogin: (state: boolean) => { setLogin(state) },
   }
 
   return (

@@ -10,8 +10,8 @@ interface PageConfig {
 const config: PageConfig = {
   port: all.port,
   dev: all.dev,
-  url: all.dev ? `https://localhost:${all.port}` : `https://${all.cname}`,
-  title: all.title
+  url: all.dev ? `http://localhost:${all.port}` : `https://${all.cname}`,
+  title: all.title,
 }
 
 export default config

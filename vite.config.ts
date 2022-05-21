@@ -16,13 +16,12 @@ export default defineConfig({
   server: {
     port: config.devport,
     host: '0.0.0.0',
-    https: true
   },
   build: {
-    brotliSize: false
+    brotliSize: false,
   },
   plugins: [
     reactRefresh(),
-    pluginYaml()
-  ]
+    pluginYaml(),
+  ],
 })

@@ -28,7 +28,7 @@ const backend = yaml.load(readFileSync('./config.backend.yaml', 'utf-8')) as Bac
 
 const config: ServerConfig = {
   ...all,
-  ...backend
+  ...backend,
 }
 
 export default config

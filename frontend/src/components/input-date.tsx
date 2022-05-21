@@ -37,13 +37,13 @@ const InputDate: React.FunctionComponent<InputDateProps> = props => {
         day: validate(day) ?? current.day,
         hour: 23,
         minute: 59,
-        second: 59
+        second: 59,
       })
     } else {
       date = DateTime.local().plus({
         year: validate(year),
         month: validate(month),
-        day: validate(day)
+        day: validate(day),
       })
     }
 

@@ -7,8 +7,8 @@ import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastif
 import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'
 
-import { pool } from '../database'
-import State from '../utils/state-codes'
+import { pool } from '../database.js'
+import State from '../utils/state-codes.js'
 
 interface JumpRequest extends RequestGI {
   Params: {
@@ -19,8 +19,8 @@ interface JumpRequest extends RequestGI {
 const jump: FastifyPluginAsync = async (server) => {
   server.get<JumpRequest>('/:shortenedId', {
     config: {
-      rateLimit: { max: 5 }
-    }
+      rateLimit: { max: 5 },
+    },
   }, async (request, reply) => {
     const { params } = request
 

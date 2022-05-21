@@ -1,6 +1,6 @@
 import { createPool } from 'mariadb'
 
-import config from './config'
+import config from './config.js'
 
 interface OkPacket {
   affectedRows: number
@@ -14,7 +14,7 @@ const pool = createPool({
   database: config.db.database,
   user: config.db.user,
   password: config.db.password,
-  connectionLimit: 5
+  connectionLimit: 5,
 })
 
 const initDatabase = async () => {

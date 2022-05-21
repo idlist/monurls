@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 
-import { pool } from '../database'
-import randomString from '../utils/random-string'
+import { pool } from '../database.js'
+import randomString from '../utils/random-string.js'
 
 const main = async () => {
   for (let i = 0; i < 100; i++) {
@@ -13,7 +13,7 @@ const main = async () => {
       [
         `https://${randomString(20)}.com`,
         randomString(6),
-        Math.random() < 0.3 ? null : mockExpire.toSQL({ includeOffset: false })
+        Math.random() < 0.3 ? null : mockExpire.toSQL({ includeOffset: false }),
       ])
   }
   pool.end()

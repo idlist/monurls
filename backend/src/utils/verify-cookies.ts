@@ -1,6 +1,6 @@
 import { FastifyRequest } from 'fastify'
 import { DateTime } from 'luxon'
-import { pool } from '../database'
+import { pool } from '../database.js'
 
 const verifyCookies = async (request: FastifyRequest): Promise<boolean> => {
   const { cookies, unsignCookie } = request

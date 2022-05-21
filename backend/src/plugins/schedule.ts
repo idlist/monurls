@@ -8,7 +8,7 @@ import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'
 import { AsyncTask, SimpleIntervalJob, SimpleIntervalSchedule } from 'toad-scheduler'
 
-import { pool } from '../database'
+import { pool } from '../database.js'
 
 const Daily: SimpleIntervalSchedule = { days: 1 }
 
@@ -20,7 +20,7 @@ const cleanLinks = new SimpleIntervalJob(Daily, new AsyncTask(
   },
   (err) => {
     console.error(err)
-  }
+  },
 ))
 
 const cleanTokens = new SimpleIntervalJob(Daily, new AsyncTask(
@@ -28,7 +28,7 @@ const cleanTokens = new SimpleIntervalJob(Daily, new AsyncTask(
   async () => {
     await pool.query('DELETE FROM tokens WHERE expire < ?',
       DateTime.local().toSQL({ includeOffset: false }))
-  }
+  },
 ))
 
 const tasks: FastifyPluginAsync = async (server) => {

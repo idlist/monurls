@@ -7,10 +7,10 @@ import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastif
 import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'
 
-import Database, { pool } from '../database'
-import randomString from '../utils/random-string'
-import State, { ServerState } from '../utils/state-codes'
-import verifyCookies from '../utils/verify-cookies'
+import Database, { pool } from '../database.js'
+import randomString from '../utils/random-string.js'
+import State, { ServerState } from '../utils/state-codes.js'
+import verifyCookies from '../utils/verify-cookies.js'
 
 interface ShortenRequest extends RequestGI {
   Body: {

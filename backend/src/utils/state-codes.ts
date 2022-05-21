@@ -13,7 +13,7 @@ const StateCodes: StateType = {
   107: 'The link is not updated.',
   404: 'Not found.',
   418: 'I\'m a teapot.',
-  429: 'Too many requests.'
+  429: 'Too many requests.',
 }
 
 interface ServerState {
@@ -25,13 +25,13 @@ class State {
   static success(payload?: Record<string, unknown>): ServerState {
     return {
       code: 0,
-      ...payload
+      ...payload,
     }
   }
   static error(code: keyof StateType): ServerState {
     return {
       code: code,
-      message: StateCodes[code]
+      message: StateCodes[code],
     }
   }
 }

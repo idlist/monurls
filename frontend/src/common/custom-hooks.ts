@@ -31,19 +31,19 @@ const messageReducer = (state: MessageState, action: MessageAction): MessageStat
     return {
       info: info,
       success: '',
-      error: ''
+      error: '',
     }
   } else if ('success' in action) {
     return {
       info: state.info,
       success: action.success ?? state.success,
-      error: ''
+      error: '',
     }
   } else if ('error' in action) {
     return {
       info: state.info,
       success: '',
-      error: action.error ?? state.error
+      error: action.error ?? state.error,
     }
   } else return state
 }
@@ -52,7 +52,7 @@ const useMessage = (message: string): readonly [MessageState, React.Dispatch<Mes
   const [state, dispatch] = useReducer(messageReducer, {
     info: message,
     success: '',
-    error: ''
+    error: '',
   })
 
   return [state, dispatch] as const

@@ -25,9 +25,9 @@ const LoginPanel: React.FunctionComponent = () => {
     try {
       const res = await axios.get(`${config.url}/auth/login`, {
         params: {
-          key: useKey ? key : ''
+          key: useKey ? key : '',
         },
-        withCredentials: true
+        withCredentials: true,
       })
 
       if ('code' in res.data) {

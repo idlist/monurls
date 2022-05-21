@@ -131,7 +131,7 @@ const Pager = (props: PagerProps) => {
         <PagerItem key={pageNum}
           display={pageNum}
           selected={props.selected === pageNum}
-          onClick={() => { props.onUpdate(pageNum) }} />
+          onClick={() => { props.onUpdate(pageNum) }} />,
       )}
       <PagerItem
         display={'>'}
@@ -153,20 +153,20 @@ const TestData: LinkData[] = [
     id: 1,
     full: 'https://github.com/',
     shortened: 'gh',
-    expire: 1624245450000
+    expire: 1624245450000,
   },
   {
     id: 2,
     full: 'https://bbs.saraba1st.com/2b/forum.php',
     shortened: 's1',
-    expire: 1624245450000
+    expire: 1624245450000,
   },
   {
     id: 3,
     full: `https://url.is.v${'e'.repeat(200)}ry.long/`,
     shortened: 'long',
-    expire: 1624245450000
-  }
+    expire: 1624245450000,
+  },
 ]
 
 interface LinkListProps {
@@ -296,9 +296,9 @@ const LinkManager: React.FunctionComponent = () => {
         params: {
           page,
           limit: 20,
-          keyword: keyword
+          keyword: keyword,
         },
-        withCredentials: true
+        withCredentials: true,
       })
 
       if (!data.code) {
@@ -346,9 +346,9 @@ const LinkManager: React.FunctionComponent = () => {
       const { data } = await axios.put(`${config.url}/api/update`, {
         id,
         dest,
-        expire: expire instanceof DateTime ? expire.toMillis() : ''
+        expire: expire instanceof DateTime ? expire.toMillis() : '',
       }, {
-        withCredentials: true
+        withCredentials: true,
       })
 
       if (!data.code) {
@@ -368,9 +368,9 @@ const LinkManager: React.FunctionComponent = () => {
     try {
       const { data } = await axios.put(`${config.url}/api/update`, {
         id,
-        expire: 0
+        expire: 0,
       }, {
-        withCredentials: true
+        withCredentials: true,
       })
 
       if (!data.code) {
@@ -390,7 +390,7 @@ const LinkManager: React.FunctionComponent = () => {
     try {
       const { data } = await axios.delete(`${config.url}/api/delete`, {
         params: { id },
-        withCredentials: true
+        withCredentials: true,
       })
 
       if (!data.code) {

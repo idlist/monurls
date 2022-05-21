@@ -9,9 +9,9 @@ import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastif
 import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'
 
-import Database, { pool, OkPacket } from '../database'
-import State, { ServerState } from '../utils/state-codes'
-import verifyCookies from '../utils/verify-cookies'
+import Database, { pool, OkPacket } from '../database.js'
+import State, { ServerState } from '../utils/state-codes.js'
+import verifyCookies from '../utils/verify-cookies.js'
 
 interface GetListRequest extends RequestGI {
   Querystring: {
@@ -22,13 +22,16 @@ interface GetListRequest extends RequestGI {
 }
 
 interface RawLinkData {
-  id: number
+  id: bigint
   full: string
   shortened: string
   expire: Date | null
 }
 
-interface LinkData extends Omit<RawLinkData, 'expire'> {
+interface LinkData {
+  id: number
+  full: string
+  shortened: string
   expire: number | null
 }
 
@@ -80,7 +83,7 @@ const manage: FastifyPluginAsync = async (server) => {
           WHERE id = ? OR full LIKE ? OR shortened LIKE ?
         `, [keywordNumber, `http%${query.keyword}%`, `%${query.keyword}`])
       : await pool.query('SELECT COUNT(*) as count FROM urls')
-    const count = countQueue[0].count
+    const count = Number(countQueue[0].count)
 
     if (!count && query.keyword) return State.error(106)
 
@@ -98,10 +101,10 @@ const manage: FastifyPluginAsync = async (server) => {
 
     for (const { id, full, shortened, expire } of listQuery) {
       list.push({
-        id,
+        id: Number(id),
         full,
         shortened,
-        expire: expire ? DateTime.fromJSDate(expire).toMillis() : null
+        expire: expire ? DateTime.fromJSDate(expire).toMillis() : null,
       })
     }
 

@@ -16,7 +16,7 @@ const AppMenu: React.FunctionComponent<AppMenuProps> = props => {
   const logoutProcess = async () => {
     try {
       const res = await axios.get(`${config.url}/auth/logout`, {
-        withCredentials: true
+        withCredentials: true,
       })
 
       if ('code' in res.data && res.data.code === 0) {

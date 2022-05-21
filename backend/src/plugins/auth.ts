@@ -8,11 +8,11 @@ import { FastifyPluginAsync, RequestGenericInterface as RequestGI } from 'fastif
 import fp from 'fastify-plugin'
 import { DateTime } from 'luxon'
 
-import config from '../config'
-import { pool } from '../database'
-import randomString from '../utils/random-string'
-import State, { ServerState } from '../utils/state-codes'
-import verifyCookies from '../utils/verify-cookies'
+import config from '../config.js'
+import { pool } from '../database.js'
+import randomString from '../utils/random-string.js'
+import State, { ServerState } from '../utils/state-codes.js'
+import verifyCookies from '../utils/verify-cookies.js'
 
 interface LoginRequest extends RequestGI {
   Querystring: {
@@ -49,7 +49,7 @@ const auth: FastifyPluginAsync = async (server) => {
         httpOnly: true,
         signed: true,
         expires: new Date(expire.toMillis()),
-        path: '/'
+        path: '/',
       })
 
       return State.success()
