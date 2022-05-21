@@ -1,7 +1,7 @@
 import { rmSync, accessSync } from 'fs'
 import { resolve } from 'path'
 import { argv } from 'process'
-import c from 'chalk'
+import c from 'kleur'
 import { build } from 'esbuild'
 import glob from 'glob'
 

@@ -3,7 +3,7 @@ import fastifyCors from '@fastify/cors'
 import fastifyCookie from '@fastify/cookie'
 import fastifyRateLimit from '@fastify/rate-limit'
 import fastifySchedule from 'fastify-schedule'
-import c from 'chalk'
+import c from 'kleur'
 
 import config from './config.js'
 import State from './utils/state-codes.js'
