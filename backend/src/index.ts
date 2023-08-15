@@ -2,7 +2,7 @@ import fastify from 'fastify'
 import fastifyCors from '@fastify/cors'
 import fastifyCookie from '@fastify/cookie'
 import fastifyRateLimit from '@fastify/rate-limit'
-import fastifySchedule from 'fastify-schedule'
+import fastifySchedule from '@fastify/schedule'
 import c from 'kleur'
 
 import config from './config.js'
@@ -57,7 +57,7 @@ server.setNotFoundHandler({
 
 const main = async () => {
   try {
-    server.listen(config.port)
+    server.listen({ port: config.port })
     console.log(`Server is listening at ${c.cyan(`http://localhost:${config.port}`)} ...`)
   } catch (err) {
     server.log.error(err)

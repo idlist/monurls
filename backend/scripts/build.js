@@ -3,7 +3,7 @@ import { resolve } from 'path'
 import { argv } from 'process'
 import c from 'kleur'
 import { build } from 'esbuild'
-import glob from 'glob'
+import glob from 'fast-glob'
 
 const distDir = resolve('./backend/dist')
 
