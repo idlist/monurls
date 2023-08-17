@@ -1,8 +1,6 @@
 <div align="center">
   <img width="80" src="./frontend/src/assets/monurls_icon.png" alt="logo" />
-
   <h1>monurls</h1>
-
 </div>
 
 我自己的 Node.js 短链接服务。
